@@ -52,9 +52,15 @@ const reservationReducer = (state:State, action: ReservationAction) => {
         ),
       };
     case ReservationActionType.CANCEL:
+      let reservations = state.reservations.filter(reservation => reservation.id !== action.payload)
+      storage.save({
+        key: 'reservations',
+        data: reservations,
+      });
+      console.log(reservations)
       return {
         ...state,
-        reservations: state.reservations.filter(reservation => reservation.id !== action.payload),
+        reservations: reservations,
       };
     default:
       return state;

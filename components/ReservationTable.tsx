@@ -48,7 +48,7 @@ const ReservationTable = () => {
               <DataTable.Cell>{""}</DataTable.Cell>
               <DataTable.Cell>{res.time.hours}:{res.time.minutes}</DataTable.Cell>
               <DataTable.Cell>
-                <Button onPress={() => console.log("canceled")}><FontAwesome
+                <Button onPress={() => dispatch({type: ReservationActionType.CANCEL, payload: res.id})}><FontAwesome
                   name="remove"
                 /></Button>
               </DataTable.Cell>

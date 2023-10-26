@@ -52,4 +52,6 @@ export const loadMockData = () => {
     key: 'reservations',
     data: reservations,
   });
+
+  storage.loaded = false;
 }
