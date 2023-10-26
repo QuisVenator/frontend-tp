@@ -1,0 +1,71 @@
+[
+    {
+        "date": "2023-09-01T04:00:00.000Z",
+        "doctor": {
+            "cedula": "123456",
+            "email": "fer@example.com",
+            "flag_is_doctor": false,
+            "id": 3,
+            "lastName": "Smith",
+            "name": "Fernando",
+            "phone": "595321456789"
+        },
+        "id": 1,
+        "patient": {
+            "cedula": "123457",
+            "email": "qwer@example.com",
+            "flag_is_doctor": true,
+            "id": 2,
+            "lastName": "Doe",
+            "name": "Mary",
+            "phone": "595321456789"
+        },
+        "time": {
+            "hours": 10,
+            "minutes": 0
+        }
+    },
+    {
+        "date": "2023-09-01T04:00:00.000Z",
+        "doctor": {
+            "cedula": "123456",
+            "email": "fer@example.com",
+            "flag_is_doctor": false,
+            "id": 3,
+            "lastName": "Smith",
+            "name": "Fernando",
+            "phone": "595321456789"
+        },
+        "id": 2,
+        "patient": {
+            "cedula": "123457",
+            "email": "qwer@example.com",
+            "flag_is_doctor": true,
+            "id": 2,
+            "lastName": "Doe",
+            "name": "Mary",
+            "phone": "595321456789"
+        },
+        "time": {
+            "hours": 11,
+            "minutes": 0
+        }
+    },
+    {
+        "date": "2023-09-02T04:00:00.000Z",
+        "id": 3,
+        "patient": {
+            "cedula": "123456",
+            "email": "doctor@example.com",
+            "flag_is_doctor": true,
+            "id": 4,
+            "lastName": "Gonzalez",
+            "name": "Doctor",
+            "phone": "595321456789"
+        },
+        "time": {
+            "hours": 10,
+            "minutes": 0
+        }
+    }
+]

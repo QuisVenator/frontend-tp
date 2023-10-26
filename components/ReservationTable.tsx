@@ -5,37 +5,26 @@ import { Category, Reservation, Time } from '../models/Reservation';
 import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View } from './Themed';
+import { ReservationActionType, useReservationContext } from '../provider/ReservationContext';
 
 const ReservationTable = () => {
   const [page, setPage] = React.useState<number>(0);
   const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[0]
+    numberOfItemsPerPageList[1]
   );
 
-  let person1 = new Person(1, 'John', 'Doe', '595123456789', 'asdf@example.com', '123456', false);
-  let person2 = new Person(2, 'Mary', 'Doe', '595321456789', 'qwer@example.com', '123457', true);
-  let person3 = new Person(3, 'Fernando', 'Smith', '595321456789', 'fer@example.com', '123456', false);
-  let person4 = new Person(4, 'Doctor', 'Gonzalez', '595321456789', 'doctor@example.com', '123456', true);
-  let category1 = new Category(1, 'Category 1');
-  let category2 = new Category(2, 'Category 2');
-
-  const [reservations] = React.useState<Reservation[]>([
-    new Reservation(1, person1, person2, new Date("2023-09-01 00:00:00"), { hours: 10, minutes: 0 }),
-    new Reservation(2, person1, person2, new Date("2023-09-01 00:00:00"), { hours: 11, minutes: 0 }),
-    new Reservation(3, person3, person4, new Date("2023-09-02 00:00:00"), { hours: 10, minutes: 0 }),
-  ]
-  );
+  const {state, dispatch} = useReservationContext();
   const [searchText, setSearchText] = React.useState('');
 
-  const allReservations = reservations;
-
   const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, reservations.length);
+  const to = Math.min((page + 1) * itemsPerPage, state.reservations.length);
 
   React.useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
+
+  console.log(state.reservations)
 
   return (
     <React.Fragment>
@@ -51,15 +40,15 @@ const ReservationTable = () => {
             <DataTable.Title>Acciones</DataTable.Title>
           </DataTable.Header>
 
-          {reservations.slice(from, to).filter(res => res.doctor.getFullName().includes(searchText)).map((res) => (
+          {state.reservations.slice(from, to).filter(res => (res.doctor.name + res.doctor.lastName).includes(searchText)).map((res) => (
             <DataTable.Row key={res.id}>
               <DataTable.Cell>{res.id}</DataTable.Cell>
-              <DataTable.Cell>{res.doctor.getFullName()}</DataTable.Cell>
-              <DataTable.Cell>{res.patient.getFullName()}</DataTable.Cell>
-              <DataTable.Cell>{res.date.toLocaleDateString()}</DataTable.Cell>
+              <DataTable.Cell>{res.doctor.name + res.doctor.lastName}</DataTable.Cell>
+              <DataTable.Cell>{res.patient.name + res.doctor.lastName}</DataTable.Cell>
+              <DataTable.Cell>{""}</DataTable.Cell>
               <DataTable.Cell>{res.time.hours}:{res.time.minutes}</DataTable.Cell>
               <DataTable.Cell>
-                <Button onPress={res.cancel}><FontAwesome
+                <Button onPress={() => console.log("canceled")}><FontAwesome
                   name="remove"
                 /></Button>
               </DataTable.Cell>
@@ -68,9 +57,9 @@ const ReservationTable = () => {
 
           <DataTable.Pagination
             page={page}
-            numberOfPages={Math.ceil(reservations.length / itemsPerPage)}
+            numberOfPages={Math.ceil(state.reservations.length / itemsPerPage)}
             onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${reservations.length}`}
+            label={`${from + 1}-${to} of ${state.reservations.length}`}
             numberOfItemsPerPageList={numberOfItemsPerPageList}
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}

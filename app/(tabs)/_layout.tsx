@@ -4,6 +4,8 @@ import { Drawer } from 'expo-router/drawer';
 import { Pressable, useColorScheme } from 'react-native';
 
 import Colors from '../../constants/Colors';
+import { ReservationActionType, useReservationContext } from '../../provider/ReservationContext';
+import storage, { loadMockData } from '../../provider/Storage';
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -17,6 +19,22 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const {state, dispatch} = useReservationContext();
+  if (!storage.loaded) {
+    storage.load({
+      key: 'reservations',
+    }).then(reservations => {
+      console.log('Stated loaded')
+      for (let reservation of reservations) {
+        console.log('Adding reservation');
+        dispatch({type: ReservationActionType.ADD, payload: reservation});
+      }
+    }).catch(err => {
+      console.log(err.message);
+    });
+    storage.loaded = true;
+  }
 
   return (
     <Drawer>

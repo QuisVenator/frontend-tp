@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { Reservation } from '../models/Reservation';
+import storage from './Storage';
 
 type State = {
   reservations: Reservation[];
@@ -28,7 +29,7 @@ const ReservationContext = createContext<{
 }>({ state: initialState, dispatch: () => null });
 (initialState);
 
-const enum ReservationActionType {
+export const enum ReservationActionType {
   ADD,
   UPDATE,
   CANCEL,
