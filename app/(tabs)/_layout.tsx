@@ -22,18 +22,17 @@ export default function TabLayout() {
 
   const {state, dispatch} = useReservationContext();
   if (!storage.loaded) {
-    storage.load({
-      key: 'reservations',
-    }).then(reservations => {
+    storage.getObject('reservations').then(result => {
+      const reservations = JSON.parse(result || "[]");
       console.log('Stated loaded')
       for (let reservation of reservations) {
         console.log('Adding reservation');
         dispatch({type: ReservationActionType.ADD, payload: reservation});
       }
+      storage.loaded = true;
     }).catch(err => {
       console.log(err.message);
     });
-    storage.loaded = true;
   }
 
   return (

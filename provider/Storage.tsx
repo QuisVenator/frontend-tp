@@ -1,30 +1,33 @@
-import Storage from 'react-native-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Person } from '../models/Person';
 import { Category, Reservation } from '../models/Reservation';
+import { ReservationActionType, useReservationContext } from './ReservationContext';
 
 
-type initializableStorage =  Storage & {
-  loaded: boolean;
+export class Storage {
+  loaded: boolean = false;
+
+  constructor() {}
+
+  saveObject(key: string, data: any) {
+    AsyncStorage.setItem(key, JSON.stringify(data));
+  }
+
+  getObject(key: string) {
+    return AsyncStorage.getItem(key)
+  }
+
+  clear() {
+    AsyncStorage.clear();
+  }
 }
 
-const storage: initializableStorage = new Storage({
-  size: 1000,
-
-  storageBackend: AsyncStorage, // for web: window.localStorage
-
-  defaultExpires: 1000 * 3600 * 24,
-
-  enableCache: true,
-
-  sync: {
-  }
-}) as initializableStorage;
+const storage = new Storage();
 
 export default storage;
 
-export const loadMockData = () => {
-  let persons = [
+export const loadMockData = (): Reservation[] => {
+  let persons: Person[] = [
     {id: 1, name: 'John', lastName: 'Doe', phone: '595123456789', email: 'asdf@example.com', cedula: '123456', flag_is_doctor: false},
     {id: 2, name: 'Mary', lastName: 'Doe', phone: '595321456789', email: 'qwer@example.com', cedula: '123457', flag_is_doctor: true},
     {id: 3, name: 'Fernando', lastName: 'Smith', phone: '595321456789', email: 'fer@example.com', cedula: '123456', flag_is_doctor: false},
@@ -40,18 +43,9 @@ export const loadMockData = () => {
     {id: 3, patient: persons[2], doctor: persons[3], date: new Date("2023-09-02 00:00:00"), time: { hours: 10, minutes: 0 }},
   ];
 
-  storage.save({
-    key: 'persons',
-    data: persons,
-  });
-  storage.save({
-    key: 'categories',
-    data: categories,
-  });
-  storage.save({
-    key: 'reservations',
-    data: reservations,
-  });
+  storage.saveObject('persons', persons,);
+  storage.saveObject('categories', categories,);
+  storage.saveObject('reservations', reservations,);
 
-  storage.loaded = false;
+  return reservations
 }
