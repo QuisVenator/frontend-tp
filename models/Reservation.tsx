@@ -1,11 +1,23 @@
 import { Person } from "./Person";
 
-export type Reservation = {
+export class Reservation {
 	id: number;
 	patient: Person;
 	doctor: Person;
 	date: Date;
 	time: Time;
+
+	constructor(id: number, patient: Person, doctor: Person, date: Date, time: Time) {
+		this.id = id;
+		this.patient = patient;
+		this.doctor = doctor;
+		this.date = date;
+		this.time = time;
+	}
+
+	cancel() {
+		
+	}
 }
 
 export type Time = {

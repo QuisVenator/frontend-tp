@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, DataTable, TextInput } from 'react-native-paper';
-import { Person } from '../src/models/Person';
-import { Category, Time } from '../src/models/Reservation';
+import { Person } from '../models/Person';
+import { Category, Reservation, Time } from '../models/Reservation';
 import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View } from './Themed';
@@ -20,28 +20,10 @@ const ReservationTable = () => {
   let category1 = new Category(1, 'Category 1');
   let category2 = new Category(2, 'Category 2');
 
-  const [reservations] = React.useState([
-    {
-      patient: person1,
-      doctor: person2,
-      date: new Date("2023-09-01 00:00:00"),
-      time: { hours: 10, minutes: 0 } as Time,
-      id: 1,
-    },
-    {
-      patient: person1,
-      doctor: person2,
-      date: new Date("2023-09-01 00:00:00"),
-      time: { hours: 11, minutes: 0 } as Time,
-      id: 2,
-    },
-    {
-      patient: person3,
-      doctor: person4,
-      date: new Date("2023-09-02 00:00:00"),
-      time: { hours: 10, minutes: 0 },
-      id: 3,
-    },
+  const [reservations] = React.useState<Reservation[]>([
+    new Reservation(1, person1, person2, new Date("2023-09-01 00:00:00"), { hours: 10, minutes: 0 }),
+    new Reservation(2, person1, person2, new Date("2023-09-01 00:00:00"), { hours: 11, minutes: 0 }),
+    new Reservation(3, person3, person4, new Date("2023-09-02 00:00:00"), { hours: 10, minutes: 0 }),
   ]
   );
   const [searchText, setSearchText] = React.useState('');
@@ -77,9 +59,9 @@ const ReservationTable = () => {
               <DataTable.Cell>{res.date.toLocaleDateString()}</DataTable.Cell>
               <DataTable.Cell>{res.time.hours}:{res.time.minutes}</DataTable.Cell>
               <DataTable.Cell>
-                <Button onPress={() => { }}><FontAwesome
+                <Button onPress={res.cancel}><FontAwesome
                   name="remove"
-                /> Cancelar</Button>
+                /></Button>
               </DataTable.Cell>
             </DataTable.Row>
           ))}
