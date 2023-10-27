@@ -5,9 +5,10 @@ import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
-import storage from '../provider/Storage';
-import { loadMockData } from '../provider/Storage';
-import { ReservationProvider, ReservationActionType, useReservationContext } from '../provider/ReservationContext';
+import { ReservationProvider } from '../provider/ReservationContext';
+import { es, registerTranslation } from 'react-native-paper-dates'
+import { MedicalRecordProvider } from '../provider/MedicalRecordContext';
+registerTranslation('es', es);
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -52,12 +53,14 @@ function RootLayoutNav() {
   return (
     <PaperProvider>
       <ReservationProvider>
+      <MedicalRecordProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>
+      </MedicalRecordProvider>
       </ReservationProvider>
     </PaperProvider>
   );
