@@ -93,7 +93,6 @@ const MedicalRecordAdd = () => {
         }}
         arrayList={doctors}
         selectedArrayList={[]}
-        textInputStyle={{ margin: 0, padding: 0 }}
         multiEnable={false}
       />
       <PaperSelect
@@ -107,7 +106,6 @@ const MedicalRecordAdd = () => {
         }}
         arrayList={patients}
         selectedArrayList={[]}
-        textInputStyle={{ margin: 0, padding: 0 }}
         multiEnable={false}
       />
 
