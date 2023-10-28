@@ -8,6 +8,7 @@ import { PaperProvider } from 'react-native-paper';
 import { ReservationProvider } from '../provider/ReservationContext';
 import { es, registerTranslation } from 'react-native-paper-dates'
 import { MedicalRecordProvider } from '../provider/MedicalRecordContext';
+import { PersonProvider } from '../provider/PersonContext';
 registerTranslation('es', es);
 
 export {
@@ -54,12 +55,14 @@ function RootLayoutNav() {
     <PaperProvider>
       <ReservationProvider>
       <MedicalRecordProvider>
+      <PersonProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>
+      </PersonProvider>
       </MedicalRecordProvider>
       </ReservationProvider>
     </PaperProvider>

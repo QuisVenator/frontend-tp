@@ -49,3 +49,16 @@ export const loadMockData = (): Reservation[] => {
 
   return reservations
 }
+
+export const loadMockDataPersons = (): Person[] => {
+  let persons: Person[] = [
+    {id: 1, name: 'John', lastName: 'Doe', phone: '595123456789', email: 'asdf@example.com', cedula: '123456', flag_is_doctor: false},
+    {id: 2, name: 'Mary', lastName: 'Doe', phone: '595321456789', email: 'qwer@example.com', cedula: '123457', flag_is_doctor: true},
+    {id: 3, name: 'Fernando', lastName: 'Smith', phone: '595321456789', email: 'fer@example.com', cedula: '123456', flag_is_doctor: false},
+    {id: 4, name: 'Doctor', lastName: 'Gonzalez', phone: '595321456789', email: 'doctor@example.com', cedula: '123456', flag_is_doctor: true},
+  ];
+
+  storage.saveObject('persons', persons,);
+
+  return persons
+}

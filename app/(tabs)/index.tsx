@@ -3,19 +3,28 @@ import { StyleSheet } from 'react-native';
 import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
 import { Button } from 'react-native-paper';
-import { loadMockData } from '../../provider/Storage';
+import { loadMockData, loadMockDataPersons } from '../../provider/Storage';
 import { ReservationActionType, useReservationContext } from '../../provider/ReservationContext';
+import { PersonActionType, usePersonContext } from '../../provider/PersonContext';
 
 export default function TabOneScreen() {
   const {state, dispatch} = useReservationContext();
-  
+  const {state: personState, dispatch: personDispatch} = usePersonContext();
+
   function resetState() {
     for (let reservation of state.reservations) {
       dispatch({type: ReservationActionType.CANCEL, payload: reservation.id});
     }
+    for (let person of personState.persons) {
+      personDispatch({type: PersonActionType.CANCEL, payload: person.id});
+    }
     const reservations = loadMockData();
+    const persons = loadMockDataPersons();
     for (let res of reservations) {
       dispatch({type: ReservationActionType.ADD, payload: res});
+    }
+    for (let person of persons) {
+      personDispatch({type: PersonActionType.ADD, payload: person});
     }
   }
   return (
