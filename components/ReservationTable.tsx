@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, DataTable, TextInput } from 'react-native-paper';
 import { Person } from '../models/Person';
-import { Category, Reservation, Time } from '../models/Reservation';
+import { Category, Reservation, Time, availableTimes, timeToString } from '../models/Reservation';
 import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View } from './Themed';
@@ -77,7 +77,7 @@ const ReservationTable = () => {
               <DataTable.Cell>{res.doctor.name + ' ' + res.doctor.lastName}</DataTable.Cell>
               <DataTable.Cell>{res.patient.name + ' ' + res.doctor.lastName}</DataTable.Cell>
               <DataTable.Cell>{res.date.getFullYear()+'-'+res.date.getMonth()+'-'+res.date.getDay()}</DataTable.Cell>
-              <DataTable.Cell>{res.time.hours}:{res.time.minutes}</DataTable.Cell>
+              <DataTable.Cell>{timeToString(res.time)}</DataTable.Cell>
               <DataTable.Cell>
                 <Button onPress={() => dispatch({ type: ReservationActionType.CANCEL, payload: res.id })}><FontAwesome
                   name="remove"

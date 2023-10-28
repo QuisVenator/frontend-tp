@@ -38,6 +38,7 @@ export const enum ReservationActionType {
 const reservationReducer = (state:State, action: ReservationAction) => {
   switch (action.type) {
     case ReservationActionType.ADD:
+      console.log("Added "+action.payload.date)
       return {
         ...state,
         reservations: [...state.reservations, action.payload],
