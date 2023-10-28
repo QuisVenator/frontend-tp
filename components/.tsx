@@ -24,8 +24,6 @@ const ReservationTable = () => {
     setPage(0);
   }, [itemsPerPage]);
 
-  console.log(state.reservations)
-
   return (
     <React.Fragment>
       <TextInput label={'Buscar'} value={searchText} onChangeText={setSearchText} />

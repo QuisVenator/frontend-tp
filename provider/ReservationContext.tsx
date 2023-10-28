@@ -54,7 +54,6 @@ const reservationReducer = (state:State, action: ReservationAction) => {
     case ReservationActionType.CANCEL:
       let reservations = state.reservations.filter(reservation => reservation.id !== action.payload)
       storage.saveObject('reservations', reservations);
-      console.log("Reservation ids are: "+reservations.map(res => res.id).toString())
       return {
         ...state,
         reservations: reservations,

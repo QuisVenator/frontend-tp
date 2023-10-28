@@ -30,9 +30,8 @@ export default function TabLayout() {
       .getObject("reservations")
       .then((result) => {
         const reservations = JSON.parse(result || "[]");
-        console.log("Stated loaded");
         for (let reservation of reservations) {
-          console.log("Adding reservation");
+          reservation.date = new Date(reservation.date);
           dispatch({ type: ReservationActionType.ADD, payload: reservation });
         }
         storage.loaded = true;
