@@ -15,7 +15,10 @@ const ReservationTable = () => {
   );
 
   const {state, dispatch} = useReservationContext();
-  const [searchText, setSearchText] = React.useState('');
+  const [doctorSearch, setDoctorSearch] = React.useState('');
+  const [patientSearch, setPatientSearch] = React.useState('');
+  const [dateFrom, setDateFrom] = React.useState('');
+  const [dateTo, setDateTo] = React.useState('');
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, state.reservations.length);
@@ -28,7 +31,10 @@ const ReservationTable = () => {
 
   return (
     <React.Fragment>
-      <TextInput label={'Buscar'} value={searchText} onChangeText={setSearchText} />
+      <View style={{flexDirection: 'row'}}>
+      <TextInput style={{marginHorizontal: '2%'}} label={'Doctor'} value={doctorSearch} onChangeText={setDoctorSearch} />
+      <TextInput label={'Paciente'} value={patientSearch} onChangeText={setPatientSearch} />
+      </View>
       <ScrollView horizontal={true}>
         <DataTable>
           <DataTable.Header>
@@ -40,7 +46,7 @@ const ReservationTable = () => {
             <DataTable.Title>Acciones</DataTable.Title>
           </DataTable.Header>
 
-          {state.reservations.slice(from, to).filter(res => (res.doctor.name + res.doctor.lastName).includes(searchText)).map((res) => (
+          {state.reservations.slice(from, to).filter(res => (res.doctor.name + res.doctor.lastName).includes(doctorSearch)).map((res) => (
             <DataTable.Row key={res.id}>
               <DataTable.Cell>{res.id}</DataTable.Cell>
               <DataTable.Cell>{res.doctor.name + res.doctor.lastName}</DataTable.Cell>

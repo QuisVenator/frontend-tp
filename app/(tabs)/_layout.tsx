@@ -67,7 +67,7 @@ export default function TabLayout() {
           }}
         />
         <Drawer.Screen
-          name="two"
+          name="reservations"
           options={{
             title: "Reservas",
           }}
