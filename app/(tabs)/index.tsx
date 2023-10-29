@@ -21,7 +21,7 @@ export default function TabOneScreen() {
     const reservations = loadMockData();
     const persons = loadMockDataPersons();
     for (let res of reservations) {
-      dispatch({type: ReservationActionType.ADD, payload: res});
+      dispatch({type: ReservationActionType.ADD_INITIAL, payload: res});
     }
     for (let person of persons) {
       personDispatch({type: PersonActionType.ADD, payload: person});

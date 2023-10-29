@@ -77,6 +77,12 @@ export default function TabLayout() {
             title: "Ficha Clínica",
           }}
         />
+        <Drawer.Screen
+          name="person"
+          options={{
+            title: "Personas",
+          }}
+        />
         
       </Drawer>
     </React.Fragment>

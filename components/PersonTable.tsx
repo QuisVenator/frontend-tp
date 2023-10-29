@@ -6,8 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { View } from './Themed';
 import { PersonActionType, usePersonContext } from '../provider/PersonContext';
-import { DatePickerInput } from "react-native-paper-dates";
-import { SelectList } from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 const PersonTable = () => {
   const [page, setPage] = React.useState<number>(0);
