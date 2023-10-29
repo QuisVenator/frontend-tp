@@ -10,6 +10,10 @@ interface Add {
   type: PersonActionType.ADD;
   payload: Person;
 }
+interface ADD_INITIAL {
+    type: PersonActionType.ADD_INITIAL;
+    payload: Person;
+  }
 
 interface Update {
     type: PersonActionType.UPDATE;
@@ -21,7 +25,7 @@ interface Cancel {
     payload: number;
 }
 
-type PersonAction = Add | Update | Cancel;
+type PersonAction = Add | ADD_INITIAL | Update | Cancel;
 
 const initialState: State = {
     persons: [],
@@ -34,14 +38,23 @@ const PersonContext = createContext<{
 (initialState);
 
 export const enum PersonActionType {
+    ADD_INITIAL,
     ADD,
     UPDATE,
     CANCEL,
 }
 
 const personReducer = (state:State, action: PersonAction) => {
+    let persons = [] as Person[];
     switch (action.type) {
         case PersonActionType.ADD:
+            persons = [...state.persons, action.payload]
+            storage.saveObject('persons', persons);
+            return {
+                ...state,
+                persons: [...state.persons, action.payload],
+            };
+        case PersonActionType.ADD_INITIAL:
             return {
                 ...state,
                 persons: [...state.persons, action.payload],
@@ -56,7 +69,7 @@ const personReducer = (state:State, action: PersonAction) => {
                 ),
             };
         case PersonActionType.CANCEL:
-            let persons = state.persons.filter(person => person.id !== action.payload)
+            persons = state.persons.filter(person => person.id !== action.payload)
             storage.saveObject('persons', persons);
             return {
                 ...state,

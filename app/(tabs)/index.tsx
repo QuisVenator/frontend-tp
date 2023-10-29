@@ -24,7 +24,7 @@ export default function TabOneScreen() {
       dispatch({type: ReservationActionType.ADD_INITIAL, payload: res});
     }
     for (let person of persons) {
-      personDispatch({type: PersonActionType.ADD, payload: person});
+      personDispatch({type: PersonActionType.ADD_INITIAL, payload: person});
     }
   }
   return (

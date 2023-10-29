@@ -8,6 +8,7 @@ import {
   ReservationActionType,
   useReservationContext,
 } from "../../provider/ReservationContext";
+import {PersonActionType,usePersonContext} from "../../provider/PersonContext";
 import storage, { loadMockData } from "../../provider/Storage";
 import React from "react";
 
@@ -25,6 +26,8 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   const { state, dispatch } = useReservationContext();
+  const {state: personState, dispatch: personDispatch} = usePersonContext();
+  
   if (!storage.loaded) {
     storage
       .getObject("reservations")
@@ -39,6 +42,14 @@ export default function TabLayout() {
       .catch((err) => {
         console.log(err.message);
       });
+    storage.getObject("persons")
+    .then((result) => {
+      const persons = JSON.parse(result || "[]");
+      for (let person of persons) {
+        personDispatch({ type: PersonActionType.ADD_INITIAL, payload: person });
+      }
+      storage.loaded = true;
+    })
   }
 
   return (
