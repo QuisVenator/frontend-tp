@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Person } from '../models/Person';
-import { Category, Reservation } from '../models/Reservation';
+import { Category } from '../models/Category';
+import { Reservation } from '../models/Reservation';
 import { ReservationActionType, useReservationContext } from './ReservationContext';
 
 
@@ -61,4 +62,15 @@ export const loadMockDataPersons = (): Person[] => {
   storage.saveObject('persons', persons,);
 
   return persons
+}
+
+export const loadMockDataCategories = (): Category[] => {
+  let categories: Category[] = [
+    {id: 1, description: 'Category 1'},
+    {id: 2, description: 'Category 2'},
+  ]
+
+  storage.saveObject('categories', categories,);
+
+  return categories;
 }

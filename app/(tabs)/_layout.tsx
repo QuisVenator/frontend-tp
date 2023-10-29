@@ -9,6 +9,7 @@ import {
   useReservationContext,
 } from "../../provider/ReservationContext";
 import {PersonActionType,usePersonContext} from "../../provider/PersonContext";
+import { CategoryActionType, useCategoryContext } from "../../provider/CategoryContext";
 import storage, { loadMockData } from "../../provider/Storage";
 import React from "react";
 
@@ -27,6 +28,7 @@ export default function TabLayout() {
 
   const { state, dispatch } = useReservationContext();
   const {state: personState, dispatch: personDispatch} = usePersonContext();
+  const {state: categoryState, dispatch: categoryDispatch} = useCategoryContext();
   
   if (!storage.loaded) {
     storage
@@ -42,6 +44,7 @@ export default function TabLayout() {
       .catch((err) => {
         console.log(err.message);
       });
+
     storage.getObject("persons")
     .then((result) => {
       const persons = JSON.parse(result || "[]");
@@ -50,6 +53,22 @@ export default function TabLayout() {
       }
       storage.loaded = true;
     })
+    .catch((err) => {
+      console.log(err.message);
+    });
+
+    storage.getObject("categories")
+    .then((result) => {
+      const categories = JSON.parse(result || "[]");
+      for (let category of categories) {
+        categoryDispatch({ type: CategoryActionType.ADD_INITIAL, payload: category });
+      }
+      storage.loaded = true;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+    
   }
 
   return (
@@ -92,6 +111,12 @@ export default function TabLayout() {
           name="person"
           options={{
             title: "Personas",
+          }}
+        />
+        <Drawer.Screen
+          name="category"
+          options={{
+            title: "Categorias",
           }}
         />
         
