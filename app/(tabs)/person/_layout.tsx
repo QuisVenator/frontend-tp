@@ -9,6 +9,13 @@ export default function Layout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="add"
+        options={{
+          headerShown: true,
+          title: "Agregar Persona",
+        }}
+      />
     </Stack>
   );
 }

@@ -8,8 +8,11 @@ import React from "react";
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Persona</Text>
+      <Text style={styles.title}>Personas</Text>
       <View>
+        <Link href="/person/add" asChild>
+          <Button icon="plus">Agregar</Button>
+        </Link>
         <PersonTable />
       </View>
     </View>
