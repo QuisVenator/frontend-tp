@@ -12,6 +12,7 @@ import { Person } from "../../../models/Person";
 import { router } from 'expo-router';
 import { Reservation, Time, availableTimes, timeToString } from "../../../models/Reservation";
 import { ReservationActionType, useReservationContext } from "../../../provider/ReservationContext";
+import { usePersonContext } from "../../../provider/PersonContext";
 
 type ReservationAddProps = {
   doctorId: number;
@@ -30,25 +31,7 @@ const ReservationAdd = () => {
 
   const reservationContext = useReservationContext();
 
-  const personContext = {
-    state: {
-      persons: [
-        // Add a few mock data in here
-        {
-          id: 1,
-          name: "Juan",
-          lastName: "Perez",
-          flag_is_doctor: true,
-        },
-        {
-          id: 2,
-          name: "Maria",
-          lastName: "Perez",
-          flag_is_doctor: false,
-        },
-      ] as Person[],
-    }
-  }
+  const personContext = usePersonContext();
 
   const addMedicalRecord = () => {
     const newRes = {
@@ -73,13 +56,10 @@ const ReservationAdd = () => {
 
   const filterTimes = (): { _id: string, value: string }[] => {
     if (!reservationAdd.doctorId) {
-      // setPlaceholderHorario("Seleccionar Doctor primero");
       return [];
     } else if (!reservationAdd.patientId) {
-      // setPlaceholderHorario("Seleccionar Paciente primero");
       return [];
     } else if (!reservationAdd.date) {
-      // setPlaceholderHorario("Seleccionar Fecha primero");
       return [];
     } else {
       let filteredTimes = [] as { _id: string, value: string }[];
@@ -104,7 +84,6 @@ const ReservationAdd = () => {
         return x;
       });
       if (filteredTimes.length == 0) {
-        // setPlaceholderHorario("No hay horarios disponibles");
         return [];
       }
       return filteredTimes;
