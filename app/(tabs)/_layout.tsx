@@ -32,7 +32,7 @@ export default function TabLayout() {
         const reservations = JSON.parse(result || "[]");
         for (let reservation of reservations) {
           reservation.date = new Date(reservation.date);
-          dispatch({ type: ReservationActionType.ADD, payload: reservation });
+          dispatch({ type: ReservationActionType.ADD_INITIAL, payload: reservation });
         }
         storage.loaded = true;
       })
