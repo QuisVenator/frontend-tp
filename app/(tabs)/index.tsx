@@ -8,16 +8,15 @@ import { ReservationActionType, useReservationContext } from '../../provider/Res
 import { PersonActionType, usePersonContext } from '../../provider/PersonContext';
 import { CategoryActionType, useCategoryContext } from '../../provider/CategoryContext';
 import React from 'react';
+import { SnackBarActionType, useSnackBarContext } from '../../provider/SnackBarContext';
 
 export default function TabOneScreen() {
   const {state, dispatch} = useReservationContext();
   const {state: personState, dispatch: personDispatch} = usePersonContext();
   const {state: categoryState, dispatch: categoryDispatch} = useCategoryContext();
-  const [visible, setVisible] = React.useState(false);
+  const {dispatch: snackBarDispatch} = useSnackBarContext();
 
-  const onToggleSnackBar = () => setVisible(!visible);
 
-  const onDismissSnackBar = () => setVisible(false);
 
   function resetState() {
     for (let reservation of state.reservations) {
@@ -41,22 +40,13 @@ export default function TabOneScreen() {
     for (let category of categories) {
       categoryDispatch({type: CategoryActionType.ADD_INITIAL, payload: category});
     }
-    onToggleSnackBar();
+    snackBarDispatch({type: SnackBarActionType.TOGGLE, payload: true});
   }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Button onPress={resetState} >Cargar datos</Button>
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        action={{
-          label: 'Cerrar',
-        }}
-        duration={3000}>
-        Datos Cargados Correctamente
-      </Snackbar>
+      <Button onPress={resetState}>Cargar datos</Button>
     </View>
   );
 }
