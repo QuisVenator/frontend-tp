@@ -135,7 +135,7 @@ export default function TabLayout() {
               label: "Cerrar",
             }}
             duration={3000}>
-            TEST
+            {snackBarState.text}
         </Snackbar>
     </React.Fragment>
   );

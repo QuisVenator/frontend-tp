@@ -40,7 +40,8 @@ export default function TabOneScreen() {
     for (let category of categories) {
       categoryDispatch({type: CategoryActionType.ADD_INITIAL, payload: category});
     }
-    snackBarDispatch({type: SnackBarActionType.TOGGLE, payload: true});
+    let payload = { visible: true, text: "Datos cargados correctamente" };
+    snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   }
   return (
     <View style={styles.container}>
