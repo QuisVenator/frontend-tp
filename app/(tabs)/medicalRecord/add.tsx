@@ -8,18 +8,21 @@ import { View } from "../../../components/Themed";
 import { PaperSelect } from "react-native-paper-select";
 import { DatePickerInput } from "react-native-paper-dates";
 import { MedicalRecord } from "../../../models/MedicalRecord";
-import { Person } from "../../../models/Person";
 import {
   MedicalRecordActionType,
   useMedicalRecordContext,
 } from "../../../provider/MedicalRecordContext";
-import { router } from 'expo-router';
-
+import { router } from "expo-router";
+import { usePersonContext } from "../../../provider/PersonContext";
+import { useCategoryContext } from "../../../provider/CategoryContext";
 
 type MedicalRecordAdd = {
   patientId: string;
+  patientName: string;
   doctorId: string;
+  doctorName: string;
   categoryId: string;
+  categoryDescription: string;
   date: Date;
   reason: string;
   diagnostic: string;
@@ -29,82 +32,99 @@ const MedicalRecordAdd = () => {
     React.useState<MedicalRecordAdd>({} as MedicalRecordAdd);
 
   const medicalRecordContext = useMedicalRecordContext();
+  const {
+    state: { persons },
+  } = usePersonContext();
+  const {
+    state: { categories },
+  } = useCategoryContext();
 
-  const patients = [
-    {
-      _id: "1",
-      value: "Patient 1",
-    },
-    {
-      _id: "2",
-      value: "Patient 2",
-    },
-  ];
+  const patients = persons.filter((p) => !p.flag_is_doctor);
+  const doctors = persons.filter((p) => p.flag_is_doctor);
 
-  const doctors = [
-    {
-      _id: "1",
-      value: "Sebastian Schweinsteiger",
-    },
-    {
-      _id: "2",
-      value: "Doctor 2",
-    },
-  ];
+  const patientList = patients.map((p) => ({
+    _id: p.id.toString(),
+    value: `${p.name} ${p.lastName}`,
+  }));
+
+  const doctorList = doctors.map((p) => ({
+    _id: p.id.toString(),
+    value: `${p.name} ${p.lastName}`,
+  }));
+
+  const categoryList = categories.map((c) => ({
+    _id: c.id.toString(),
+    value: c.description,
+  }));
 
   const addMedicalRecord = () => {
-    const { doctorId, patientId, ...restData } = medicalRecordAdd;
+    const { doctorId, patientId, categoryId, ...restData } = medicalRecordAdd;
     const id = medicalRecordContext.state.medicalRecords.length + 1;
+
+    const patient = patients.find((p) => p.id === Number(patientId));
+    if (!patient) return;
+
+    const doctor = doctors.find((p) => p.id === Number(doctorId));
+    if (!doctor) return;
+
+    const category = categories.find((p) => p.id === Number(categoryId));
+    if (!category) return;
+
     const medicalRecord: MedicalRecord = {
       id,
       ...restData,
-      doctor: {
-        id: Number(doctorId),
-        name: "Sebastian Schweinsteiger",
-        lastName: "F",
-      } as Person,
-      patient: {
-        id: Number(patientId),
-        name: "Patient 1",
-        lastName: "R",
-      } as Person,
-      category: {
-        id: 1,
-        description: "Category 1",
-      },
+      doctor,
+      patient,
+      category,
     };
 
     medicalRecordContext.dispatch({
       type: MedicalRecordActionType.ADD,
       payload: medicalRecord,
     });
-    router.push('/medicalRecord');
+    router.push("/medicalRecord");
   };
   return (
     <SafeAreaProvider>
       <PaperSelect
         label="Seleccione el doctor"
-        value={medicalRecordAdd.doctorId}
-        onSelection={(value: any) => {
+        value={medicalRecordAdd.doctorName}
+        onSelection={(value) => {
           setMedicalRecordAdd({
             ...medicalRecordAdd,
-            doctorId: value.text,
+            doctorId: value.selectedList[0]._id,
+            doctorName: value.selectedList[0].value,
           });
         }}
-        arrayList={doctors}
+        arrayList={doctorList}
         selectedArrayList={[]}
         multiEnable={false}
       />
       <PaperSelect
         label="Seleccione el paciente"
-        value={medicalRecordAdd.patientId}
+        value={medicalRecordAdd.patientName}
         onSelection={(value: any) => {
           setMedicalRecordAdd({
             ...medicalRecordAdd,
-            patientId: value.text,
+            patientId: value.selectedList[0]._id,
+            patientName: value.selectedList[0].value,
           });
         }}
-        arrayList={patients}
+        arrayList={patientList}
+        selectedArrayList={[]}
+        multiEnable={false}
+      />
+      <PaperSelect
+        label="Seleccione la categoria"
+        value={medicalRecordAdd.categoryDescription}
+        onSelection={(value: any) => {
+          setMedicalRecordAdd({
+            ...medicalRecordAdd,
+            categoryId: value.selectedList[0]._id,
+            categoryDescription: value.selectedList[0].value,
+          });
+        }}
+        arrayList={categoryList}
         selectedArrayList={[]}
         multiEnable={false}
       />
