@@ -13,8 +13,9 @@ import {
   MedicalRecordActionType,
   useMedicalRecordContext,
 } from "../../../provider/MedicalRecordContext";
-import { router } from 'expo-router';
-
+import { router } from "expo-router";
+import { usePersonContext } from "../../../provider/PersonContext";
+import { useCategoryContext } from "../../../provider/CategoryContext";
 
 type MedicalRecordAdd = {
   patientId: string;
@@ -29,69 +30,70 @@ const MedicalRecordAdd = () => {
     React.useState<MedicalRecordAdd>({} as MedicalRecordAdd);
 
   const medicalRecordContext = useMedicalRecordContext();
+  const {
+    state: { persons },
+  } = usePersonContext();
+  const {
+    state: { categories },
+  } = useCategoryContext();
 
-  const patients = [
-    {
-      _id: "1",
-      value: "Patient 1",
-    },
-    {
-      _id: "2",
-      value: "Patient 2",
-    },
-  ];
+  const patients = persons.filter((p) => !p.flag_is_doctor);
+  const doctors = persons.filter((p) => p.flag_is_doctor);
 
-  const doctors = [
-    {
-      _id: "1",
-      value: "Doctor 1",
-    },
-    {
-      _id: "2",
-      value: "Doctor 2",
-    },
-  ];
+  const patientList = patients.map((p) => ({
+    _id: p.id.toString(),
+    value: `${p.name} ${p.lastName}`,
+  }));
+
+  const doctorList = doctors.map((p) => ({
+    _id: p.id.toString(),
+    value: `${p.name} ${p.lastName}`,
+  }));
+
+  const categoryList = categories.map((c) => ({
+    _id: c.id.toString(),
+    value: c.description,
+  }));
 
   const addMedicalRecord = () => {
-    const { doctorId, patientId, ...restData } = medicalRecordAdd;
+    const { doctorId, patientId, categoryId, ...restData } = medicalRecordAdd;
     const id = medicalRecordContext.state.medicalRecords.length + 1;
+
+    const patient = patients.find((p) => p.id === Number(patientId));
+    if (!patient) return;
+
+    const doctor = doctors.find((p) => p.id === Number(doctorId));
+    if (!doctor) return;
+
+    const category = categories.find((p) => p.id === Number(categoryId));
+    if (!category) return;
+
     const medicalRecord: MedicalRecord = {
       id,
       ...restData,
-      doctor: {
-        id: Number(doctorId),
-        name: "Doctor 1",
-        lastName: "F",
-      } as Person,
-      patient: {
-        id: Number(patientId),
-        name: "Patient 1",
-        lastName: "R",
-      } as Person,
-      category: {
-        id: 1,
-        description: "Category 1",
-      },
+      doctor,
+      patient,
+      category,
     };
 
     medicalRecordContext.dispatch({
       type: MedicalRecordActionType.ADD,
       payload: medicalRecord,
     });
-    router.push('/medicalRecord');
+    router.push("/medicalRecord");
   };
   return (
     <SafeAreaProvider>
       <PaperSelect
         label="Seleccione el doctor"
         value={medicalRecordAdd.doctorId}
-        onSelection={(value: any) => {
+        onSelection={(value) => {
           setMedicalRecordAdd({
             ...medicalRecordAdd,
-            doctorId: value.text,
+            doctorId: value.selectedList[0]._id,
           });
         }}
-        arrayList={doctors}
+        arrayList={doctorList}
         selectedArrayList={[]}
         multiEnable={false}
       />
@@ -101,10 +103,23 @@ const MedicalRecordAdd = () => {
         onSelection={(value: any) => {
           setMedicalRecordAdd({
             ...medicalRecordAdd,
-            patientId: value.text,
+            patientId: value.selectedList[0]._id,
           });
         }}
-        arrayList={patients}
+        arrayList={patientList}
+        selectedArrayList={[]}
+        multiEnable={false}
+      />
+      <PaperSelect
+        label="Seleccione la categoria"
+        value={medicalRecordAdd.categoryId}
+        onSelection={(value: any) => {
+          setMedicalRecordAdd({
+            ...medicalRecordAdd,
+            categoryId: value.selectedList[0]._id,
+          });
+        }}
+        arrayList={categoryList}
         selectedArrayList={[]}
         multiEnable={false}
       />
