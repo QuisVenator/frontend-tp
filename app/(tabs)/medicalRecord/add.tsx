@@ -44,7 +44,7 @@ const MedicalRecordAdd = () => {
   const doctors = [
     {
       _id: "1",
-      value: "Doctor 1",
+      value: "Sebastian Schweinsteiger",
     },
     {
       _id: "2",
@@ -60,7 +60,7 @@ const MedicalRecordAdd = () => {
       ...restData,
       doctor: {
         id: Number(doctorId),
-        name: "Doctor 1",
+        name: "Sebastian Schweinsteiger",
         lastName: "F",
       } as Person,
       patient: {
