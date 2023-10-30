@@ -8,6 +8,7 @@ import { View } from './Themed';
 import { PersonActionType, usePersonContext } from '../provider/PersonContext';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { router } from 'expo-router';
+import { SnackBarActionType, useSnackBarContext } from '../provider/SnackBarContext';
 
 const PersonTable = () => {
   const [page, setPage] = React.useState<number>(0);
@@ -19,6 +20,8 @@ const PersonTable = () => {
   const { state, dispatch } = usePersonContext();
   const [personSearch, setPersonSearch] = React.useState('');
   const [selected, setSelected] = React.useState("");
+
+  const {dispatch: snackBarDispatch} = useSnackBarContext();
 
   const optionsDoctor = [
     { key: 'ALL', value: 'Doctor o Paciente' },
@@ -73,13 +76,17 @@ const PersonTable = () => {
                 <DataTable.Cell>{res.flag_is_doctor ? "SI" : "NO"}</DataTable.Cell>
                 <DataTable.Cell>
                   <View style={{ flexDirection: 'row' }}>
-                  <Button onPress={() => dispatch({ type: PersonActionType.CANCEL, payload: res.id })}><FontAwesome
-                    name="remove"
-                  /></Button>
-                  <Button onPress={() => {
-                    dispatch({ type: PersonActionType.EDIT, payload: res });
-                    router.push('/person/edit');
-                  }}><FontAwesome name="edit"></FontAwesome></Button>
+                    <Button onPress={() => {
+                      dispatch({ type: PersonActionType.CANCEL, payload: res.id });
+                      let payload = { visible: true, text: "Persona eliminada correctamente" };
+                      snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
+                    }}><FontAwesome name="remove" />
+                    </Button>
+                    <Button onPress={() => {
+                      dispatch({ type: PersonActionType.EDIT, payload: res });
+                      router.push('/person/edit');
+                    }}><FontAwesome name="edit" />
+                    </Button>
                   </View>
                 </DataTable.Cell>
               </DataTable.Row>

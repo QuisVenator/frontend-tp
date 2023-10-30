@@ -2,16 +2,21 @@ import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
-import { Button } from 'react-native-paper';
+import { Button, Snackbar } from 'react-native-paper';
 import { loadMockData, loadMockDataPersons, loadMockDataCategories } from '../../provider/Storage';
 import { ReservationActionType, useReservationContext } from '../../provider/ReservationContext';
 import { PersonActionType, usePersonContext } from '../../provider/PersonContext';
 import { CategoryActionType, useCategoryContext } from '../../provider/CategoryContext';
+import React from 'react';
+import { SnackBarActionType, useSnackBarContext } from '../../provider/SnackBarContext';
 
 export default function TabOneScreen() {
   const {state, dispatch} = useReservationContext();
   const {state: personState, dispatch: personDispatch} = usePersonContext();
   const {state: categoryState, dispatch: categoryDispatch} = useCategoryContext();
+  const {dispatch: snackBarDispatch} = useSnackBarContext();
+
+
 
   function resetState() {
     for (let reservation of state.reservations) {
@@ -35,12 +40,14 @@ export default function TabOneScreen() {
     for (let category of categories) {
       categoryDispatch({type: CategoryActionType.ADD_INITIAL, payload: category});
     }
+    let payload = { visible: true, text: "Datos cargados correctamente" };
+    snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Button onPress={resetState} >Cargar datos</Button>
+      <Button onPress={resetState}>Cargar datos</Button>
     </View>
   );
 }
