@@ -8,7 +8,6 @@ import { View } from "../../../components/Themed";
 import { PaperSelect } from "react-native-paper-select";
 import { DatePickerInput } from "react-native-paper-dates";
 import { MedicalRecord } from "../../../models/MedicalRecord";
-import { Person } from "../../../models/Person";
 import {
   MedicalRecordActionType,
   useMedicalRecordContext,
@@ -19,8 +18,11 @@ import { useCategoryContext } from "../../../provider/CategoryContext";
 
 type MedicalRecordAdd = {
   patientId: string;
+  patientName: string;
   doctorId: string;
+  doctorName: string;
   categoryId: string;
+  categoryDescription: string;
   date: Date;
   reason: string;
   diagnostic: string;
@@ -86,11 +88,12 @@ const MedicalRecordAdd = () => {
     <SafeAreaProvider>
       <PaperSelect
         label="Seleccione el doctor"
-        value={medicalRecordAdd.doctorId}
+        value={medicalRecordAdd.doctorName}
         onSelection={(value) => {
           setMedicalRecordAdd({
             ...medicalRecordAdd,
             doctorId: value.selectedList[0]._id,
+            doctorName: value.selectedList[0].value,
           });
         }}
         arrayList={doctorList}
@@ -99,11 +102,12 @@ const MedicalRecordAdd = () => {
       />
       <PaperSelect
         label="Seleccione el paciente"
-        value={medicalRecordAdd.patientId}
+        value={medicalRecordAdd.patientName}
         onSelection={(value: any) => {
           setMedicalRecordAdd({
             ...medicalRecordAdd,
             patientId: value.selectedList[0]._id,
+            patientName: value.selectedList[0].value,
           });
         }}
         arrayList={patientList}
@@ -112,11 +116,12 @@ const MedicalRecordAdd = () => {
       />
       <PaperSelect
         label="Seleccione la categoria"
-        value={medicalRecordAdd.categoryId}
+        value={medicalRecordAdd.categoryDescription}
         onSelection={(value: any) => {
           setMedicalRecordAdd({
             ...medicalRecordAdd,
             categoryId: value.selectedList[0]._id,
+            categoryDescription: value.selectedList[0].value,
           });
         }}
         arrayList={categoryList}
