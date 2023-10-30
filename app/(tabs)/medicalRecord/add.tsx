@@ -78,7 +78,7 @@ const MedicalRecordAdd = () => {
       type: MedicalRecordActionType.ADD,
       payload: medicalRecord,
     });
-    router.back();
+    router.push('/medicalRecord');
   };
   return (
     <SafeAreaProvider>

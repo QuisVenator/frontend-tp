@@ -10,41 +10,18 @@ import { PersonActionType, usePersonContext } from "../../../provider/PersonCont
 import { router } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list'
 
-type PersonAdd = {
-  name: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  cedula: string;
-  flag_is_doctor: boolean;
-}
-
 const PersonAdd = () => {
-  const [personAdd, setPersonAdd] = React.useState<PersonAdd>({} as PersonAdd);
   const personContext = usePersonContext();
-
-  const [selected, setSelected] = React.useState(false);
 
   const optionsDoctor = [
     { key: true, value: 'Doctor' },
     { key: false, value: 'Paciente' },
   ]
 
-  const addPerson = () => {
-    const { name, lastName, phone, email, cedula, flag_is_doctor } = personAdd;
-    const id = personContext.state.persons.length + 1;
-    const person: Person = {
-      id,
-      name,
-      lastName,
-      phone,
-      email,
-      cedula,
-      flag_is_doctor
-    };
+  const editPerson = () => {
     personContext.dispatch({
-      type: PersonActionType.ADD,
-      payload: person,
+      type: PersonActionType.UPDATE,
+      payload: personContext.state.edit,
     });
     router.push('/person');
   }
@@ -53,38 +30,38 @@ const PersonAdd = () => {
       <View style={styles.container}>
         <TextInput
           label="Nombre"
-          value={personAdd.name}
+          value={personContext.state.edit.name}
           onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, name: text })
+            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, name: text } })
           }
         />
         <TextInput
           label="Apellido"
-          value={personAdd.lastName}
+          value={personContext.state.edit.lastName}
           onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, lastName: text })
+            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, lastName: text } })
           }
         />
         <TextInput
           label="Telefono"
-          value={personAdd.phone}
+          value={personContext.state.edit.phone}
           keyboardType="numeric"
           onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, phone: text })
+            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, phone: text } })
           }
         />
         <TextInput
           label="Email"
-          value={personAdd.email}
+          value={personContext.state.edit.email}
           onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, email: text })
+            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, email: text } })
           }
         />
         <TextInput
           label="Cedula"
-          value={personAdd.cedula}
+          value={personContext.state.edit.cedula}
           onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, cedula: text })
+            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, cedula: text } })
           }
         />
         <SelectList
@@ -92,18 +69,17 @@ const PersonAdd = () => {
           dropdownStyles={{ backgroundColor: 'black' }}
           inputStyles={{ color: 'white' }}
           dropdownTextStyles={{ color: 'white' }}
-          setSelected={(val: boolean) => setSelected(val)}
+          defaultOption={{ key: personContext.state.edit.flag_is_doctor, value: personContext.state.edit.flag_is_doctor ? 'Doctor' : 'Paciente' }}
+          setSelected={(val: boolean) => personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, flag_is_doctor: val } })}
           data={optionsDoctor}
           save="key"
           search={false}
-          defaultOption={{ key: false, value: 'Paciente' }}
-          onSelect={() => setPersonAdd({ ...personAdd, flag_is_doctor: selected.valueOf() })}
         />
       </View>
       <Button
-        icon="plus"
+        icon="pencil"
         mode="contained"
-        onPress={addPerson}
+        onPress={editPerson}
         children="Guardar"
       />
     </SafeAreaProvider>

@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { View } from './Themed';
 import { PersonActionType, usePersonContext } from '../provider/PersonContext';
 import { SelectList } from 'react-native-dropdown-select-list'
+import { router } from 'expo-router';
 
 const PersonTable = () => {
   const [page, setPage] = React.useState<number>(0);
@@ -36,7 +37,13 @@ const PersonTable = () => {
     <React.Fragment>
       <TextInput style={{ width: '100%' }} label={'Nombre y Apellido'} value={personSearch} onChangeText={setPersonSearch} />
       <SelectList
+        defaultOption={{ key:'ALL', value:'Doctor o Paciente' }}
+        boxStyles={{backgroundColor: 'black'}}
+        dropdownStyles={{backgroundColor: 'black'}}
+        inputStyles={{color: 'white'}}
+        dropdownTextStyles={{color: 'white'}}
         setSelected={(val: string) => setSelected(val)}
+        search={false}
         data={optionsDoctor}
         save="key"
       />
@@ -50,7 +57,7 @@ const PersonTable = () => {
             <DataTable.Title>Email</DataTable.Title>
             <DataTable.Title>Cedula</DataTable.Title>
             <DataTable.Title>Es Doctor</DataTable.Title>
-            <DataTable.Title>Acciones</DataTable.Title>
+            <DataTable.Title style={{justifyContent: 'center'}}>Acciones</DataTable.Title>
           </DataTable.Header>
 
           {state.persons.slice(from, to).filter(res => (res.name + ' ' + res.lastName).includes(personSearch) &&
@@ -65,9 +72,15 @@ const PersonTable = () => {
                 <DataTable.Cell>{res.cedula}</DataTable.Cell>
                 <DataTable.Cell>{res.flag_is_doctor ? "SI" : "NO"}</DataTable.Cell>
                 <DataTable.Cell>
+                  <View style={{ flexDirection: 'row' }}>
                   <Button onPress={() => dispatch({ type: PersonActionType.CANCEL, payload: res.id })}><FontAwesome
                     name="remove"
                   /></Button>
+                  <Button onPress={() => {
+                    dispatch({ type: PersonActionType.EDIT, payload: res });
+                    router.push('/person/edit');
+                  }}><FontAwesome name="edit"></FontAwesome></Button>
+                  </View>
                 </DataTable.Cell>
               </DataTable.Row>
             ))}

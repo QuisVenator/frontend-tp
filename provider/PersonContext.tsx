@@ -4,12 +4,17 @@ import storage from './Storage';
 
 type State = {
   persons: Person[];
+  edit: Person;
 };
 
 interface Add {
-  type: PersonActionType.ADD;
-  payload: Person;
-}
+    type: PersonActionType.ADD;
+    payload: Person;
+  }
+  interface SET_EDIT {
+    type: PersonActionType.EDIT;
+    payload: Person;
+  }
 interface ADD_INITIAL {
     type: PersonActionType.ADD_INITIAL;
     payload: Person;
@@ -25,10 +30,11 @@ interface Cancel {
     payload: number;
 }
 
-type PersonAction = Add | ADD_INITIAL | Update | Cancel;
+type PersonAction = Add | ADD_INITIAL | Update | Cancel | SET_EDIT;
 
 const initialState: State = {
     persons: [],
+    edit: {} as Person,
 };
 
 const PersonContext = createContext<{
@@ -42,6 +48,7 @@ export const enum PersonActionType {
     ADD,
     UPDATE,
     CANCEL,
+    EDIT,
 }
 
 const personReducer = (state:State, action: PersonAction) => {
@@ -75,6 +82,11 @@ const personReducer = (state:State, action: PersonAction) => {
                 ...state,
                 persons: persons,
             };
+        case PersonActionType.EDIT:
+            return {
+                ...state,
+                edit: action.payload,
+            }
         default:
             return state;
     }

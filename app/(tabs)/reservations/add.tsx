@@ -51,7 +51,7 @@ const ReservationAdd = () => {
       payload: newRes,
     });
     console.log(reservationContext.state.reservations)
-    router.replace('/reservations');
+    router.push('/reservations');
   };
 
   const filterTimes = (): { _id: string, value: string }[] => {
