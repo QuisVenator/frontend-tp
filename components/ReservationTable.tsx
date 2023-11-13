@@ -73,7 +73,7 @@ const ReservationTable = () => {
             <DataTable.Title>Paciente</DataTable.Title>
             <DataTable.Title>Fecha</DataTable.Title>
             <DataTable.Title>Horario</DataTable.Title>
-            <DataTable.Title>Acciones</DataTable.Title>
+            <DataTable.Title style={{justifyContent: 'center'}}>Acciones</DataTable.Title>
           </DataTable.Header>
 
           {filteredReservations.slice(from, to).map((res) => (
