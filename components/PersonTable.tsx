@@ -21,7 +21,7 @@ const PersonTable = () => {
   const [personSearch, setPersonSearch] = React.useState('');
   const [selected, setSelected] = React.useState("");
 
-  const {dispatch: snackBarDispatch} = useSnackBarContext();
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   const optionsDoctor = [
     { key: 'ALL', value: 'Doctor o Paciente' },

@@ -17,6 +17,7 @@ import { usePersonContext } from "../../../provider/PersonContext";
 import { useCategoryContext } from "../../../provider/CategoryContext";
 import { Reservation } from "../../../models/Reservation";
 import { useReservationContext } from "../../../provider/ReservationContext";
+import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackBarContext";
 
 type MedicalRecordAdd = {
   patientId: string;
@@ -84,11 +85,10 @@ const MedicalRecordAdd = () => {
         });
       }
       router.setParams({ passedResId: "-1" });
-    } 
+    }
   }, [searchParams]);
 
-  // console.log(foundReservation);
-
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   const addMedicalRecord = () => {
     const { doctorId, patientId, categoryId, ...restData } = medicalRecordAdd;
@@ -116,6 +116,9 @@ const MedicalRecordAdd = () => {
       payload: medicalRecord,
     });
     router.push("/medicalRecord");
+
+    let payload = { visible: true, text: "Ficha agregada correctamente" };
+    snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   };
   return (
     <React.Fragment>

@@ -23,7 +23,6 @@ type PersonAdd = {
 const PersonAdd = () => {
   const [personAdd, setPersonAdd] = React.useState<PersonAdd>({} as PersonAdd);
   const personContext = usePersonContext();
-  const {dispatch: snackBarDispatch} = useSnackBarContext();
 
   const [selected, setSelected] = React.useState(false);
 
@@ -31,6 +30,8 @@ const PersonAdd = () => {
     { key: true, value: 'Doctor' },
     { key: false, value: 'Paciente' },
   ]
+
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   const addPerson = () => {
     const { name, lastName, phone, email, cedula, flag_is_doctor } = personAdd;
@@ -49,6 +50,7 @@ const PersonAdd = () => {
       payload: person,
     });
     router.push('/person');
+
     let payload = { visible: true, text: "Persona agregada correctamente" };
     snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   }

@@ -13,11 +13,13 @@ import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackB
 
 const PersonAdd = () => {
   const personContext = usePersonContext();
-  const {dispatch: snackBarDispatch} = useSnackBarContext();
+
   const optionsDoctor = [
     { key: true, value: 'Doctor' },
     { key: false, value: 'Paciente' },
   ]
+
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   const editPerson = () => {
     personContext.dispatch({
@@ -25,6 +27,7 @@ const PersonAdd = () => {
       payload: personContext.state.edit,
     });
     router.push('/person');
+
     let payload = { visible: true, text: "Persona editada correctamente" };
     snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   }

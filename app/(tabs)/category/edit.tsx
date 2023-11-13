@@ -15,7 +15,7 @@ import { CategoryActionType, useCategoryContext } from "../../../provider/Catego
 
 const CategoryAdd = () => {
   const categoryContext = useCategoryContext();
-  const {dispatch: snackBarDispatch} = useSnackBarContext();
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   const editPerson = () => {
     categoryContext.dispatch({
@@ -23,6 +23,7 @@ const CategoryAdd = () => {
       payload: categoryContext.state.edit,
     });
     router.push('/category');
+
     let payload = { visible: true, text: "Categoria editada correctamente" };
     snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   }

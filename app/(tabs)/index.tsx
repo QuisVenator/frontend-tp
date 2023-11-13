@@ -1,8 +1,7 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
-import { Button, Snackbar } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { loadMockData, loadMockDataPersons, loadMockDataCategories } from '../../provider/Storage';
 import { ReservationActionType, useReservationContext } from '../../provider/ReservationContext';
 import { PersonActionType, usePersonContext } from '../../provider/PersonContext';
@@ -14,9 +13,8 @@ export default function TabOneScreen() {
   const {state, dispatch} = useReservationContext();
   const {state: personState, dispatch: personDispatch} = usePersonContext();
   const {state: categoryState, dispatch: categoryDispatch} = useCategoryContext();
-  const {dispatch: snackBarDispatch} = useSnackBarContext();
 
-
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   function resetState() {
     for (let reservation of state.reservations) {
@@ -40,6 +38,7 @@ export default function TabOneScreen() {
     for (let category of categories) {
       categoryDispatch({type: CategoryActionType.ADD_INITIAL, payload: category});
     }
+
     let payload = { visible: true, text: "Datos cargados correctamente" };
     snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   }

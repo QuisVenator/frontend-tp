@@ -16,7 +16,7 @@ const CategoryTable = () => {
   );
 
   const { state, dispatch } = useCategoryContext();
-  const {dispatch: snackBarDispatch} = useSnackBarContext();
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, state.categories.length);
