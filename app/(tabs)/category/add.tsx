@@ -46,13 +46,13 @@ const CategoryAdd = () => {
                         setCategoryAdd({ ...categoryAdd, description: text })
                     }
                 />
+                <Button
+                    icon="plus"
+                    mode="contained"
+                    onPress={addCategory}
+                    children="Guardar"
+                />
             </View>
-            <Button
-                icon="plus"
-                mode="contained"
-                onPress={addCategory}
-                children="Guardar"
-            />
         </SafeAreaProvider>
     )
 }
@@ -60,7 +60,7 @@ const CategoryAdd = () => {
 const styles = StyleSheet.create({
     container: {
       flexDirection: "column",
-      gap: 40,
+      gap: 4,
     },
     title: {
       fontSize: 20,

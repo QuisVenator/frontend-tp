@@ -10,6 +10,7 @@ import { PersonActionType, usePersonContext } from "../../../provider/PersonCont
 import { router } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackBarContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 const PersonAdd = () => {
   const personContext = usePersonContext();
@@ -33,55 +34,57 @@ const PersonAdd = () => {
   }
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <TextInput
-          label="Nombre"
-          value={personContext.state.edit.name}
-          onChangeText={(text) =>
-            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, name: text } })
-          }
-        />
-        <TextInput
-          label="Apellido"
-          value={personContext.state.edit.lastName}
-          onChangeText={(text) =>
-            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, lastName: text } })
-          }
-        />
-        <TextInput
-          label="Telefono"
-          value={personContext.state.edit.phone}
-          keyboardType="numeric"
-          onChangeText={(text) =>
-            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, phone: text } })
-          }
-        />
-        <TextInput
-          label="Email"
-          value={personContext.state.edit.email}
-          onChangeText={(text) =>
-            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, email: text } })
-          }
-        />
-        <TextInput
-          label="Cedula"
-          value={personContext.state.edit.cedula}
-          onChangeText={(text) =>
-            personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, cedula: text } })
-          }
-        />
-        <SelectList
-          boxStyles={{ backgroundColor: 'black' }}
-          dropdownStyles={{ backgroundColor: 'black' }}
-          inputStyles={{ color: 'white' }}
-          dropdownTextStyles={{ color: 'white' }}
-          defaultOption={{ key: personContext.state.edit.flag_is_doctor, value: personContext.state.edit.flag_is_doctor ? 'Doctor' : 'Paciente' }}
-          setSelected={(val: boolean) => personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, flag_is_doctor: val } })}
-          data={optionsDoctor}
-          save="key"
-          search={false}
-        />
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <TextInput
+            label="Nombre"
+            value={personContext.state.edit.name}
+            onChangeText={(text) =>
+              personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, name: text } })
+            }
+          />
+          <TextInput
+            label="Apellido"
+            value={personContext.state.edit.lastName}
+            onChangeText={(text) =>
+              personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, lastName: text } })
+            }
+          />
+          <TextInput
+            label="Telefono"
+            value={personContext.state.edit.phone}
+            keyboardType="numeric"
+            onChangeText={(text) =>
+              personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, phone: text } })
+            }
+          />
+          <TextInput
+            label="Email"
+            value={personContext.state.edit.email}
+            onChangeText={(text) =>
+              personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, email: text } })
+            }
+          />
+          <TextInput
+            label="Cedula"
+            value={personContext.state.edit.cedula}
+            onChangeText={(text) =>
+              personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, cedula: text } })
+            }
+          />
+          <SelectList
+            boxStyles={{ backgroundColor: 'black' }}
+            dropdownStyles={{ backgroundColor: 'black' }}
+            inputStyles={{ color: 'white' }}
+            dropdownTextStyles={{ color: 'white' }}
+            defaultOption={{ key: personContext.state.edit.flag_is_doctor, value: personContext.state.edit.flag_is_doctor ? 'Doctor' : 'Paciente' }}
+            setSelected={(val: boolean) => personContext.dispatch({ type: PersonActionType.EDIT, payload: { ...personContext.state.edit, flag_is_doctor: val } })}
+            data={optionsDoctor}
+            save="key"
+            search={false}
+          />
+        </View>
+      </ScrollView>
       <Button
         icon="pencil"
         mode="contained"
@@ -95,7 +98,7 @@ const PersonAdd = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    gap: 40,
+    gap: 4,
   },
   title: {
     fontSize: 20,

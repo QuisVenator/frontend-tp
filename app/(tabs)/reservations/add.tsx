@@ -108,7 +108,7 @@ const ReservationAdd = () => {
   }, [reservationAdd.doctorId, reservationAdd.patientId, reservationAdd.date]);
 
   return (
-    <React.Fragment>
+      <View style={styles.container}>
       <View style={{ width: '100%', height: 56 }}>
         <PaperSelect
           label="Seleccione el doctor"
@@ -203,7 +203,7 @@ const ReservationAdd = () => {
         onPress={addMedicalRecord}
         children="Guardar"
       />
-    </React.Fragment>
+      </View>
   );
 };
 const styles = StyleSheet.create({
@@ -216,6 +216,10 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  container: {
+    flexDirection: "column",
+    gap: 4,
   },
 });
 

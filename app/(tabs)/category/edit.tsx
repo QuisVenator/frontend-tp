@@ -37,13 +37,13 @@ const CategoryAdd = () => {
             categoryContext.dispatch({ type: CategoryActionType.EDIT, payload: { ...categoryContext.state.edit, description: text } })
           }
         />
+        <Button
+          icon="pencil"
+          mode="contained"
+          onPress={editPerson}
+          children="Guardar"
+        />
       </View>
-      <Button
-        icon="pencil"
-        mode="contained"
-        onPress={editPerson}
-        children="Guardar"
-      />
     </SafeAreaProvider>
   )
 }
@@ -51,7 +51,7 @@ const CategoryAdd = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    gap: 40,
+    gap: 4,
   },
   title: {
     fontSize: 20,

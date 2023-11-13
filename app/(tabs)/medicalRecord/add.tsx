@@ -18,6 +18,7 @@ import { useCategoryContext } from "../../../provider/CategoryContext";
 import { Reservation } from "../../../models/Reservation";
 import { useReservationContext } from "../../../provider/ReservationContext";
 import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackBarContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 type MedicalRecordAdd = {
   patientId: string;
@@ -122,101 +123,105 @@ const MedicalRecordAdd = () => {
   };
   return (
     <React.Fragment>
-      <View style={{ width: '100%', height: 56 }}>
-        <SafeAreaProvider>
-          <PaperSelect
-            label="Seleccione el doctor"
-            value={medicalRecordAdd.doctorName || ((foundReservation && foundReservation.doctor)? `${foundReservation.doctor.name} ${foundReservation.doctor.lastName}` : '')}
-            onSelection={(value) => {
-              setMedicalRecordAdd({
-                ...medicalRecordAdd,
-                doctorId: value.selectedList[0]._id,
-                doctorName: value.selectedList[0].value,
-              });
-            }}
-            arrayList={doctorList}
-            selectedArrayList={(foundReservation && foundReservation.doctor)
-              ? [{ _id: foundReservation.doctor.id.toString(), value: `${foundReservation.doctor.name} ${foundReservation.doctor.lastName}` }]
-              : [{ _id: '', value: '' }]
-            }
-            multiEnable={false}
-          />
-          <PaperSelect
-            label="Seleccione el paciente"
-            value={medicalRecordAdd.patientName || ((foundReservation && foundReservation.patient)? `${foundReservation.patient.name} ${foundReservation.patient.lastName}` : '')}
-            onSelection={(value: any) => {
-              setMedicalRecordAdd({
-                ...medicalRecordAdd,
-                patientId: value.selectedList[0]._id,
-                patientName: value.selectedList[0].value,
-              });
-            }}
-            arrayList={patientList}
-            selectedArrayList={(foundReservation && foundReservation.patient)
-              ? [{ _id: foundReservation.patient.id.toString(), value: `${foundReservation.patient.name} ${foundReservation.patient.lastName}` }]
-              : [{ _id: '', value: '' }]
-            }
-            multiEnable={false}
-          />
-          <PaperSelect
-            label="Seleccione la categoria"
-            value={medicalRecordAdd.categoryDescription}
-            onSelection={(value: any) => {
-              setMedicalRecordAdd({
-                ...medicalRecordAdd,
-                categoryId: value.selectedList[0]._id,
-                categoryDescription: value.selectedList[0].value,
-              });
-            }}
-            arrayList={categoryList}
-            selectedArrayList={[]}
-            multiEnable={false}
-          />
+      <ScrollView>
+            <View style={styles.container}>
+            <View style={{ width: '100%', height: 56 }}>
+              <PaperSelect
+                label="Seleccione el doctor"
+                value={medicalRecordAdd.doctorName || ((foundReservation && foundReservation.doctor)? `${foundReservation.doctor.name} ${foundReservation.doctor.lastName}` : '')}
+                onSelection={(value) => {
+                  setMedicalRecordAdd({
+                    ...medicalRecordAdd,
+                    doctorId: value.selectedList[0]._id,
+                    doctorName: value.selectedList[0].value,
+                  });
+                }}
+                arrayList={doctorList}
+                selectedArrayList={(foundReservation && foundReservation.doctor)
+                  ? [{ _id: foundReservation.doctor.id.toString(), value: `${foundReservation.doctor.name} ${foundReservation.doctor.lastName}` }]
+                  : [{ _id: '', value: '' }]
+                }
+                multiEnable={false}
+              />
+            </View>
+            <View style={{ width: '100%', height: 56 }}>
+              <PaperSelect
+                label="Seleccione el paciente"
+                value={medicalRecordAdd.patientName || ((foundReservation && foundReservation.patient)? `${foundReservation.patient.name} ${foundReservation.patient.lastName}` : '')}
+                onSelection={(value: any) => {
+                  setMedicalRecordAdd({
+                    ...medicalRecordAdd,
+                    patientId: value.selectedList[0]._id,
+                    patientName: value.selectedList[0].value,
+                  });
+                }}
+                arrayList={patientList}
+                selectedArrayList={(foundReservation && foundReservation.patient)
+                  ? [{ _id: foundReservation.patient.id.toString(), value: `${foundReservation.patient.name} ${foundReservation.patient.lastName}` }]
+                  : [{ _id: '', value: '' }]
+                }
+                multiEnable={false}
+              />
+            </View>
+            <View style={{ width: '100%', height: 56 }}>
+              <PaperSelect
+                label="Seleccione la categoria"
+                value={medicalRecordAdd.categoryDescription}
+                onSelection={(value: any) => {
+                  setMedicalRecordAdd({
+                    ...medicalRecordAdd,
+                    categoryId: value.selectedList[0]._id,
+                    categoryDescription: value.selectedList[0].value,
+                  });
+                }}
+                arrayList={categoryList}
+                selectedArrayList={[]}
+                multiEnable={false}
+              />
+            </View>
 
-          <View style={styles.container}>
-            <TextInput
-              label="Motivo"
-              value={medicalRecordAdd.reason}
-              onChangeText={(text) =>
-                setMedicalRecordAdd({ ...medicalRecordAdd, reason: text })
-              }
-            />
-            <DatePickerInput
-              label="Fecha"
-              onChange={(date) =>
-                setMedicalRecordAdd({ ...medicalRecordAdd, date: date as Date })
-              }
-              inputMode="start"
-              locale="es"
-              value={
-                medicalRecordAdd.date || ((foundReservation && foundReservation.date)
-                  ? foundReservation.date : medicalRecordAdd.date)
-              }
-              presentationStyle="pageSheet"
-            />
-            <TextInput
-              label="Diágnostico"
-              value={medicalRecordAdd.diagnostic}
-              onChangeText={(text) =>
-                setMedicalRecordAdd({ ...medicalRecordAdd, diagnostic: text })
-              }
-            />
-          </View>
-          <Button
-            icon="plus"
-            mode="contained"
-            onPress={addMedicalRecord}
-            children="Guardar"
-          />
-        </SafeAreaProvider>
-      </View>
+              <TextInput
+                label="Motivo"
+                value={medicalRecordAdd.reason}
+                onChangeText={(text) =>
+                  setMedicalRecordAdd({ ...medicalRecordAdd, reason: text })
+                }
+              />
+              <DatePickerInput
+                label="Fecha"
+                onChange={(date) =>
+                  setMedicalRecordAdd({ ...medicalRecordAdd, date: date as Date })
+                }
+                inputMode="start"
+                locale="es"
+                value={
+                  medicalRecordAdd.date || ((foundReservation && foundReservation.date)
+                    ? foundReservation.date : medicalRecordAdd.date)
+                }
+                presentationStyle="pageSheet"
+              />
+              <TextInput
+                label="Diágnostico"
+                value={medicalRecordAdd.diagnostic}
+                onChangeText={(text) =>
+                  setMedicalRecordAdd({ ...medicalRecordAdd, diagnostic: text })
+                }
+              />
+              <Button
+                icon="plus"
+                mode="contained"
+                onPress={addMedicalRecord}
+                children="Guardar"
+              />
+            </View>
+      </ScrollView>
     </React.Fragment>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    gap: 40,
+    gap: 4,
   },
   title: {
     fontSize: 20,

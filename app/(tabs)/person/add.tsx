@@ -10,6 +10,7 @@ import { PersonActionType, usePersonContext } from "../../../provider/PersonCont
 import { router } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackBarContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 type PersonAdd = {
   name: string;
@@ -56,56 +57,58 @@ const PersonAdd = () => {
   }
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <TextInput
-          label="Nombre"
-          value={personAdd.name}
-          onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, name: text })
-          }
-        />
-        <TextInput
-          label="Apellido"
-          value={personAdd.lastName}
-          onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, lastName: text })
-          }
-        />
-        <TextInput
-          label="Telefono"
-          value={personAdd.phone}
-          keyboardType="numeric"
-          onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, phone: text })
-          }
-        />
-        <TextInput
-          label="Email"
-          value={personAdd.email}
-          onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, email: text })
-          }
-        />
-        <TextInput
-          label="Cedula"
-          value={personAdd.cedula}
-          onChangeText={(text) =>
-            setPersonAdd({ ...personAdd, cedula: text })
-          }
-        />
-        <SelectList
-          boxStyles={{ backgroundColor: 'black' }}
-          dropdownStyles={{ backgroundColor: 'black' }}
-          inputStyles={{ color: 'white' }}
-          dropdownTextStyles={{ color: 'white' }}
-          setSelected={(val: boolean) => setSelected(val)}
-          data={optionsDoctor}
-          save="key"
-          search={false}
-          defaultOption={{ key: false, value: 'Paciente' }}
-          onSelect={() => setPersonAdd({ ...personAdd, flag_is_doctor: selected.valueOf() })}
-        />
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <TextInput
+            label="Nombre"
+            value={personAdd.name}
+            onChangeText={(text) =>
+              setPersonAdd({ ...personAdd, name: text })
+            }
+          />
+          <TextInput
+            label="Apellido"
+            value={personAdd.lastName}
+            onChangeText={(text) =>
+              setPersonAdd({ ...personAdd, lastName: text })
+            }
+          />
+          <TextInput
+            label="Telefono"
+            value={personAdd.phone}
+            keyboardType="numeric"
+            onChangeText={(text) =>
+              setPersonAdd({ ...personAdd, phone: text })
+            }
+          />
+          <TextInput
+            label="Email"
+            value={personAdd.email}
+            onChangeText={(text) =>
+              setPersonAdd({ ...personAdd, email: text })
+            }
+          />
+          <TextInput
+            label="Cedula"
+            value={personAdd.cedula}
+            onChangeText={(text) =>
+              setPersonAdd({ ...personAdd, cedula: text })
+            }
+          />
+          <SelectList
+            boxStyles={{ backgroundColor: 'black' }}
+            dropdownStyles={{ backgroundColor: 'black' }}
+            inputStyles={{ color: 'white' }}
+            dropdownTextStyles={{ color: 'white' }}
+            setSelected={(val: boolean) => setSelected(val)}
+            data={optionsDoctor}
+            save="key"
+            search={false}
+            defaultOption={{ key: false, value: 'Paciente' }}
+            onSelect={() => setPersonAdd({ ...personAdd, flag_is_doctor: selected.valueOf() })}
+          />
+        </View>
+      </ScrollView>
       <Button
         icon="plus"
         mode="contained"
@@ -119,7 +122,7 @@ const PersonAdd = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
-    gap: 40,
+    gap: 4,
   },
   title: {
     fontSize: 20,
