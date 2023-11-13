@@ -12,9 +12,11 @@ import {
   MedicalRecordActionType,
   useMedicalRecordContext,
 } from "../../../provider/MedicalRecordContext";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { usePersonContext } from "../../../provider/PersonContext";
 import { useCategoryContext } from "../../../provider/CategoryContext";
+import { Reservation } from "../../../models/Reservation";
+import { useReservationContext } from "../../../provider/ReservationContext";
 
 type MedicalRecordAdd = {
   patientId: string;
@@ -38,6 +40,9 @@ const MedicalRecordAdd = () => {
   const {
     state: { categories },
   } = useCategoryContext();
+  const {
+    state: { reservations },
+  } = useReservationContext();
 
   const patients = persons.filter((p) => !p.flag_is_doctor);
   const doctors = persons.filter((p) => p.flag_is_doctor);
@@ -56,6 +61,34 @@ const MedicalRecordAdd = () => {
     _id: c.id.toString(),
     value: c.description,
   }));
+
+
+  const searchParams = useLocalSearchParams()
+  const [foundReservation, setFoundReservation] =
+    React.useState<Reservation>({} as Reservation);
+
+  React.useEffect(() => {
+    if (searchParams.passedResId !== "-1") {
+      const passedResId: number = +searchParams.passedResId;
+      const foundReservationObj = reservations.filter(reservation => reservation.id === passedResId)[0];
+      setFoundReservation(foundReservationObj);
+
+      if (foundReservationObj) {
+        setMedicalRecordAdd({
+          ...medicalRecordAdd,
+          doctorId: foundReservationObj.doctor.id.toString(),
+          doctorName: foundReservationObj.doctor.name + " " + foundReservationObj.doctor.lastName,
+          patientId: foundReservationObj.patient.id.toString(),
+          patientName: foundReservationObj.patient.name + " " + foundReservationObj.patient.lastName,
+          date: foundReservationObj.date,
+        });
+      }
+      router.setParams({ passedResId: "-1" });
+    } 
+  }, [searchParams]);
+
+  // console.log(foundReservation);
+
 
   const addMedicalRecord = () => {
     const { doctorId, patientId, categoryId, ...restData } = medicalRecordAdd;
@@ -85,83 +118,96 @@ const MedicalRecordAdd = () => {
     router.push("/medicalRecord");
   };
   return (
-    <SafeAreaProvider>
-      <PaperSelect
-        label="Seleccione el doctor"
-        value={medicalRecordAdd.doctorName}
-        onSelection={(value) => {
-          setMedicalRecordAdd({
-            ...medicalRecordAdd,
-            doctorId: value.selectedList[0]._id,
-            doctorName: value.selectedList[0].value,
-          });
-        }}
-        arrayList={doctorList}
-        selectedArrayList={[]}
-        multiEnable={false}
-      />
-      <PaperSelect
-        label="Seleccione el paciente"
-        value={medicalRecordAdd.patientName}
-        onSelection={(value: any) => {
-          setMedicalRecordAdd({
-            ...medicalRecordAdd,
-            patientId: value.selectedList[0]._id,
-            patientName: value.selectedList[0].value,
-          });
-        }}
-        arrayList={patientList}
-        selectedArrayList={[]}
-        multiEnable={false}
-      />
-      <PaperSelect
-        label="Seleccione la categoria"
-        value={medicalRecordAdd.categoryDescription}
-        onSelection={(value: any) => {
-          setMedicalRecordAdd({
-            ...medicalRecordAdd,
-            categoryId: value.selectedList[0]._id,
-            categoryDescription: value.selectedList[0].value,
-          });
-        }}
-        arrayList={categoryList}
-        selectedArrayList={[]}
-        multiEnable={false}
-      />
+    <React.Fragment>
+      <View style={{ width: '100%', height: 56 }}>
+        <SafeAreaProvider>
+          <PaperSelect
+            label="Seleccione el doctor"
+            value={medicalRecordAdd.doctorName || ((foundReservation && foundReservation.doctor)? `${foundReservation.doctor.name} ${foundReservation.doctor.lastName}` : '')}
+            onSelection={(value) => {
+              setMedicalRecordAdd({
+                ...medicalRecordAdd,
+                doctorId: value.selectedList[0]._id,
+                doctorName: value.selectedList[0].value,
+              });
+            }}
+            arrayList={doctorList}
+            selectedArrayList={(foundReservation && foundReservation.doctor)
+              ? [{ _id: foundReservation.doctor.id.toString(), value: `${foundReservation.doctor.name} ${foundReservation.doctor.lastName}` }]
+              : [{ _id: '', value: '' }]
+            }
+            multiEnable={false}
+          />
+          <PaperSelect
+            label="Seleccione el paciente"
+            value={medicalRecordAdd.patientName || ((foundReservation && foundReservation.patient)? `${foundReservation.patient.name} ${foundReservation.patient.lastName}` : '')}
+            onSelection={(value: any) => {
+              setMedicalRecordAdd({
+                ...medicalRecordAdd,
+                patientId: value.selectedList[0]._id,
+                patientName: value.selectedList[0].value,
+              });
+            }}
+            arrayList={patientList}
+            selectedArrayList={(foundReservation && foundReservation.patient)
+              ? [{ _id: foundReservation.patient.id.toString(), value: `${foundReservation.patient.name} ${foundReservation.patient.lastName}` }]
+              : [{ _id: '', value: '' }]
+            }
+            multiEnable={false}
+          />
+          <PaperSelect
+            label="Seleccione la categoria"
+            value={medicalRecordAdd.categoryDescription}
+            onSelection={(value: any) => {
+              setMedicalRecordAdd({
+                ...medicalRecordAdd,
+                categoryId: value.selectedList[0]._id,
+                categoryDescription: value.selectedList[0].value,
+              });
+            }}
+            arrayList={categoryList}
+            selectedArrayList={[]}
+            multiEnable={false}
+          />
 
-      <View style={styles.container}>
-        <TextInput
-          label="Motivo"
-          value={medicalRecordAdd.reason}
-          onChangeText={(text) =>
-            setMedicalRecordAdd({ ...medicalRecordAdd, reason: text })
-          }
-        />
-        <DatePickerInput
-          label="Fecha"
-          onChange={(date) =>
-            setMedicalRecordAdd({ ...medicalRecordAdd, date: date as Date })
-          }
-          inputMode="start"
-          locale="es"
-          value={medicalRecordAdd.date}
-          presentationStyle="pageSheet"
-        />
-        <TextInput
-          label="Diágnostico"
-          value={medicalRecordAdd.diagnostic}
-          onChangeText={(text) =>
-            setMedicalRecordAdd({ ...medicalRecordAdd, diagnostic: text })
-          }
-        />
+          <View style={styles.container}>
+            <TextInput
+              label="Motivo"
+              value={medicalRecordAdd.reason}
+              onChangeText={(text) =>
+                setMedicalRecordAdd({ ...medicalRecordAdd, reason: text })
+              }
+            />
+            <DatePickerInput
+              label="Fecha"
+              onChange={(date) =>
+                setMedicalRecordAdd({ ...medicalRecordAdd, date: date as Date })
+              }
+              inputMode="start"
+              locale="es"
+              value={
+                medicalRecordAdd.date || ((foundReservation && foundReservation.date)
+                  ? foundReservation.date : medicalRecordAdd.date)
+              }
+              presentationStyle="pageSheet"
+            />
+            <TextInput
+              label="Diágnostico"
+              value={medicalRecordAdd.diagnostic}
+              onChangeText={(text) =>
+                setMedicalRecordAdd({ ...medicalRecordAdd, diagnostic: text })
+              }
+            />
+          </View>
+          <Button
+            icon="plus"
+            mode="contained"
+            onPress={addMedicalRecord}
+            children="Guardar"
+          />
+        </SafeAreaProvider>
       </View>
-      <Button
-        icon="plus"
-        mode="contained"
-        onPress={addMedicalRecord}
-        children="Guardar"
-      />
-    </SafeAreaProvider>
+    </React.Fragment>
   );
 };
 const styles = StyleSheet.create({
