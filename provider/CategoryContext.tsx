@@ -4,11 +4,16 @@ import storage from './Storage';
 
 type State = {
   categories: Category[];
+  edit: Category; 
 };
 
 interface Add {
   type: CategoryActionType.ADD;
   payload: Category;
+}
+interface SET_EDIT {
+    type: CategoryActionType.EDIT;
+    payload: Category;
 }
 interface ADD_INITIAL {
     type: CategoryActionType.ADD_INITIAL;
@@ -25,10 +30,11 @@ interface Cancel {
     payload: number;
 }
 
-type CategoryAction = Add | ADD_INITIAL | Update | Cancel;
+type CategoryAction = Add | ADD_INITIAL | Update | Cancel | SET_EDIT;
 
 const initialState: State = {
     categories: [],
+    edit: {} as Category,
 };
 
 const CategoryContext = createContext<{
@@ -42,6 +48,7 @@ export const enum CategoryActionType {
     ADD,
     UPDATE,
     CANCEL,
+    EDIT,
 }
 
 const categoryReducer = (state:State, action: CategoryAction) => {
@@ -75,6 +82,11 @@ const categoryReducer = (state:State, action: CategoryAction) => {
                 ...state,
                 categories: categories,
             };
+        case CategoryActionType.EDIT:
+            return {
+                ...state,
+                edit: action.payload,
+            }
         default:
             return state;
     }
