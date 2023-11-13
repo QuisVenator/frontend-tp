@@ -44,9 +44,9 @@ export default function TabOneScreen() {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>TP Frontend</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Button onPress={resetState}>Cargar datos</Button>
+      <Button onPress={resetState}>Cargar datos prueba</Button>
     </View>
   );
 }
