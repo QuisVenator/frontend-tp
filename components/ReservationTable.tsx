@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { View } from './Themed';
 import { ReservationActionType, useReservationContext } from '../provider/ReservationContext';
 import { DatePickerInput } from "react-native-paper-dates";
+import { router } from 'expo-router';
 
 const ReservationTable = () => {
   const [page, setPage] = React.useState<number>(0);
@@ -81,6 +82,9 @@ const ReservationTable = () => {
               <DataTable.Cell>
                 <Button onPress={() => dispatch({ type: ReservationActionType.CANCEL, payload: res.id })}><FontAwesome
                   name="remove"
+                /></Button>
+                <Button onPress={() =>{router.push({ pathname: '/medicalRecord/add', params: { passedResId: res.id } });}}><FontAwesome
+                  name="book"
                 /></Button>
               </DataTable.Cell>
             </DataTable.Row>

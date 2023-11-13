@@ -94,6 +94,7 @@ const MedicalRecordTable = () => {
               <DataTable.Cell>
                 {`${res.patient.name} ${res.patient.lastName}`}
               </DataTable.Cell>
+              <DataTable.Cell>{res.date.getFullYear()+'-'+res.date.getMonth()+'-'+res.date.getDay()}</DataTable.Cell>
               <DataTable.Cell>{res.category.description}</DataTable.Cell>
               <DataTable.Cell>{res.diagnostic}</DataTable.Cell>
               <DataTable.Cell>{res.reason}</DataTable.Cell>
