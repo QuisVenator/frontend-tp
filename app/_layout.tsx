@@ -10,6 +10,7 @@ import { es, registerTranslation } from 'react-native-paper-dates'
 import { MedicalRecordProvider } from '../provider/MedicalRecordContext';
 import { PersonProvider } from '../provider/PersonContext';
 import { CategoryProvider } from '../provider/CategoryContext';
+import { SnackBarProvider } from '../provider/SnackBarContext';
 registerTranslation('es', es);
 
 export {
@@ -54,6 +55,7 @@ function RootLayoutNav() {
 
   return (
     <PaperProvider>
+      <SnackBarProvider>
       <ReservationProvider>
       <MedicalRecordProvider>
       <PersonProvider>
@@ -68,6 +70,7 @@ function RootLayoutNav() {
       </PersonProvider>
       </MedicalRecordProvider>
       </ReservationProvider>
+      </SnackBarProvider>
     </PaperProvider>
   );
 }

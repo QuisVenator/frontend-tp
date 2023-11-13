@@ -7,6 +7,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { View } from './Themed';
 import { ReservationActionType, useReservationContext } from '../provider/ReservationContext';
 import { DatePickerInput } from "react-native-paper-dates";
+import { router } from 'expo-router';
+import { SnackBarActionType, useSnackBarContext } from '../provider/SnackBarContext';
 
 const ReservationTable = () => {
   const [page, setPage] = React.useState<number>(0);
@@ -23,6 +25,8 @@ const ReservationTable = () => {
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, state.reservations.length);
+
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   React.useEffect(() => {
     setPage(0);
@@ -68,22 +72,28 @@ const ReservationTable = () => {
             <DataTable.Title>Acciones</DataTable.Title>
           </DataTable.Header>
 
-          {state.reservations.slice(from, to).filter(res => (res.doctor.name+' '+res.doctor.lastName).includes(doctorSearch) && 
+          {state.reservations.slice(from, to).filter(res => (res.doctor.name+' '+res.doctor.lastName).includes(doctorSearch) &&
             (res.patient.name+' '+res.patient.lastName).includes(patientSearch) &&
             res.date >= dateFrom && res.date <= dateTo &&
             res.id > 0).map((res) => (
-            <DataTable.Row key={res.id}>
-              <DataTable.Cell>{res.id}</DataTable.Cell>
-              <DataTable.Cell>{res.doctor.name + ' ' + res.doctor.lastName}</DataTable.Cell>
-              <DataTable.Cell>{res.patient.name + ' ' + res.doctor.lastName}</DataTable.Cell>
-              <DataTable.Cell>{res.date.getFullYear()+'-'+res.date.getMonth()+'-'+res.date.getDay()}</DataTable.Cell>
-              <DataTable.Cell>{timeToString(res.time)}</DataTable.Cell>
-              <DataTable.Cell>
-                <Button onPress={() => dispatch({ type: ReservationActionType.CANCEL, payload: res.id })}><FontAwesome
-                  name="remove"
-                /></Button>
-              </DataTable.Cell>
-            </DataTable.Row>
+              <DataTable.Row key={res.id}>
+                <DataTable.Cell>{res.id}</DataTable.Cell>
+                <DataTable.Cell>{res.doctor.name + ' ' + res.doctor.lastName}</DataTable.Cell>
+                <DataTable.Cell>{res.patient.name + ' ' + res.doctor.lastName}</DataTable.Cell>
+                <DataTable.Cell>{res.date.getFullYear() + '-' + res.date.getMonth() + '-' + res.date.getDay()}</DataTable.Cell>
+                <DataTable.Cell>{timeToString(res.time)}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Button onPress={() => {
+                    dispatch({ type: ReservationActionType.CANCEL, payload: res.id });
+                    let payload = { visible: true, text: "Reserva eliminada correctamente" };
+                    snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
+                  }}><FontAwesome name="remove" />
+                  </Button>
+                  <Button onPress={() => { router.push({ pathname: '/medicalRecord/add', params: { passedResId: res.id } }); }}><FontAwesome
+                    name="book"
+                  /></Button>
+                </DataTable.Cell>
+              </DataTable.Row>
           ))}
 
           <DataTable.Pagination

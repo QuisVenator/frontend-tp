@@ -13,6 +13,7 @@ import { router } from 'expo-router';
 import { Reservation, Time, availableTimes, timeToString } from "../../../models/Reservation";
 import { ReservationActionType, useReservationContext } from "../../../provider/ReservationContext";
 import { usePersonContext } from "../../../provider/PersonContext";
+import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackBarContext";
 
 type ReservationAddProps = {
   doctorId: number;
@@ -30,8 +31,9 @@ const ReservationAdd = () => {
   const [placeholderHorario, setPlaceholderHorario] = React.useState("");
 
   const reservationContext = useReservationContext();
-
   const personContext = usePersonContext();
+
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
 
   const addMedicalRecord = () => {
     const newRes = {
@@ -52,6 +54,9 @@ const ReservationAdd = () => {
     });
     console.log(reservationContext.state.reservations)
     router.push('/reservations');
+
+    let payload = { visible: true, text: "Reserva agregada correctamente" };
+    snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   };
 
   const filterTimes = (): { _id: string, value: string }[] => {

@@ -9,6 +9,7 @@ import { Person } from "../../../models/Person";
 import { PersonActionType, usePersonContext } from "../../../provider/PersonContext";
 import { router } from 'expo-router';
 import { SelectList } from 'react-native-dropdown-select-list'
+import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackBarContext";
 
 type PersonAdd = {
   name: string;
@@ -30,6 +31,8 @@ const PersonAdd = () => {
     { key: false, value: 'Paciente' },
   ]
 
+  const { dispatch: snackBarDispatch } = useSnackBarContext();
+
   const addPerson = () => {
     const { name, lastName, phone, email, cedula, flag_is_doctor } = personAdd;
     const id = personContext.state.persons.length + 1;
@@ -47,6 +50,9 @@ const PersonAdd = () => {
       payload: person,
     });
     router.push('/person');
+
+    let payload = { visible: true, text: "Persona agregada correctamente" };
+    snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
   }
   return (
     <SafeAreaProvider>

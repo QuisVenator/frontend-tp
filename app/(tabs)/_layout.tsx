@@ -12,6 +12,8 @@ import {PersonActionType,usePersonContext} from "../../provider/PersonContext";
 import { CategoryActionType, useCategoryContext } from "../../provider/CategoryContext";
 import storage, { loadMockData } from "../../provider/Storage";
 import React from "react";
+import { Snackbar } from "react-native-paper";
+import { SnackBarActionType, useSnackBarContext } from "../../provider/SnackBarContext";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -29,7 +31,9 @@ export default function TabLayout() {
   const { state, dispatch } = useReservationContext();
   const {state: personState, dispatch: personDispatch} = usePersonContext();
   const {state: categoryState, dispatch: categoryDispatch} = useCategoryContext();
-  
+
+  const { state: snackBarState, dispatch: snackBarDispatch } = useSnackBarContext();
+
   if (!storage.loaded) {
     storage
       .getObject("reservations")
@@ -68,7 +72,7 @@ export default function TabLayout() {
     .catch((err) => {
       console.log(err.message);
     });
-    
+
   }
 
   return (
@@ -119,8 +123,20 @@ export default function TabLayout() {
             title: "Categorias",
           }}
         />
-        
       </Drawer>
+        <Snackbar
+            visible={snackBarState.visible}
+            onDismiss={() =>
+              snackBarDispatch({
+                type: SnackBarActionType.DISABLE,
+              })
+            }
+            action={{
+              label: "Cerrar",
+            }}
+            duration={3000}>
+            {snackBarState.text}
+        </Snackbar>
     </React.Fragment>
   );
 }

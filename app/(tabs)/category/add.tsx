@@ -6,8 +6,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { View } from "../../../components/Themed";
 
 import { Category } from "../../../models/Category";
-import {CategoryActionType,useCategoryContext} from "../../../provider/CategoryContext";
+import { CategoryActionType, useCategoryContext } from "../../../provider/CategoryContext";
 import { router } from 'expo-router';
+import { SnackBarActionType, useSnackBarContext } from "../../../provider/SnackBarContext";
 
 type CategoryAdd={
     description:string;
@@ -16,6 +17,8 @@ type CategoryAdd={
 const CategoryAdd = () => {
     const [categoryAdd, setCategoryAdd] = React.useState <CategoryAdd>({} as CategoryAdd);
     const categoryContext = useCategoryContext();
+
+    const { dispatch: snackBarDispatch } = useSnackBarContext();
 
     const addCategory = () => {
         const {description} = categoryAdd;
@@ -29,6 +32,9 @@ const CategoryAdd = () => {
             payload: category,
         });
         router.back();
+
+        let payload = { visible: true, text: "Categoría agregada correctamente" };
+        snackBarDispatch({ type: SnackBarActionType.TOGGLE, payload });
     }
     return (
         <SafeAreaProvider>
