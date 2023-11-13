@@ -9,7 +9,7 @@ import { ReservationActionType, useReservationContext } from '../provider/Reserv
 
 const ReservationTable = () => {
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+  const [numberOfItemsPerPageList] = React.useState([10, 15, 20]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[1]
   );

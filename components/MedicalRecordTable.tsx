@@ -5,7 +5,7 @@ import { useMedicalRecordContext } from "../provider/MedicalRecordContext";
 
 const MedicalRecordTable = () => {
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+  const [numberOfItemsPerPageList] = React.useState([10, 15, 20]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[1]
   );
@@ -74,7 +74,7 @@ const MedicalRecordTable = () => {
       />
 
       <ScrollView horizontal={true}>
-        <DataTable>
+        <DataTable  style={{ width: 1040 }}>
           <DataTable.Header>
             <DataTable.Title>ID</DataTable.Title>
             <DataTable.Title>Doctor</DataTable.Title>
@@ -104,10 +104,10 @@ const MedicalRecordTable = () => {
           <DataTable.Pagination
             page={page}
             numberOfPages={Math.ceil(
-              state.medicalRecords.length / itemsPerPage
+              filteredData.length / itemsPerPage
             )}
             onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${state.medicalRecords.length}`}
+            label={`${filteredData.length ? from + 1 : 0}-${to} of ${filteredData.length}`}
             numberOfItemsPerPageList={numberOfItemsPerPageList}
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}

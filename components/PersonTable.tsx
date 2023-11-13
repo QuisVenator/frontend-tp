@@ -12,7 +12,7 @@ import { SnackBarActionType, useSnackBarContext } from '../provider/SnackBarCont
 
 const PersonTable = () => {
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+  const [numberOfItemsPerPageList] = React.useState([10, 15, 20]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[1]
   );
@@ -31,14 +31,17 @@ const PersonTable = () => {
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, state.persons.length);
+  const filteredPersons = state.persons.filter(res => (res.name + ' ' + res.lastName).includes(personSearch) 
+                          && (res.flag_is_doctor.toString().includes(selected) 
+                          || "ALL".includes(selected)) && res.id > 0)
 
   React.useEffect(() => {
     setPage(0);
-  }, [itemsPerPage]);
+  }, [itemsPerPage, filteredPersons]);
 
   return (
     <React.Fragment>
-      <TextInput style={{ width: '100%' }} label={'Nombre y Apellido'} value={personSearch} onChangeText={setPersonSearch} />
+      <TextInput label={'Nombre y Apellido'} value={personSearch} onChangeText={setPersonSearch} />
       <SelectList
         defaultOption={{ key:'ALL', value:'Doctor o Paciente' }}
         boxStyles={{backgroundColor: 'black'}}
@@ -63,9 +66,7 @@ const PersonTable = () => {
             <DataTable.Title style={{justifyContent: 'center'}}>Acciones</DataTable.Title>
           </DataTable.Header>
 
-          {state.persons.slice(from, to).filter(res => (res.name + ' ' + res.lastName).includes(personSearch) &&
-            (res.flag_is_doctor.toString().includes(selected) || "ALL".includes(selected)) &&
-            res.id > 0).map((res) => (
+          {filteredPersons.slice(from, to).map((res) => (
               <DataTable.Row key={res.id}>
                 <DataTable.Cell>{res.id}</DataTable.Cell>
                 <DataTable.Cell>{res.name}</DataTable.Cell>
@@ -74,7 +75,7 @@ const PersonTable = () => {
                 <DataTable.Cell>{res.email}</DataTable.Cell>
                 <DataTable.Cell>{res.cedula}</DataTable.Cell>
                 <DataTable.Cell>{res.flag_is_doctor ? "SI" : "NO"}</DataTable.Cell>
-                <DataTable.Cell>
+                <DataTable.Cell style={{justifyContent: 'center'}}>
                   <View style={{ flexDirection: 'row' }}>
                     <Button onPress={() => {
                       dispatch({ type: PersonActionType.CANCEL, payload: res.id });
@@ -94,9 +95,9 @@ const PersonTable = () => {
 
           <DataTable.Pagination
             page={page}
-            numberOfPages={Math.ceil(state.persons.length / itemsPerPage)}
+            numberOfPages={Math.ceil(filteredPersons.length / itemsPerPage)}
             onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${state.persons.length}`}
+            label={`${filteredPersons.length ? from + 1 : 0}-${to} of ${filteredPersons.length}`}
             numberOfItemsPerPageList={numberOfItemsPerPageList}
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}

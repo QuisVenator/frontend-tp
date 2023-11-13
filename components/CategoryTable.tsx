@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 
 const CategoryTable = () => {
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+  const [numberOfItemsPerPageList] = React.useState([10, 15, 20]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[1]
   );
@@ -39,7 +39,7 @@ const CategoryTable = () => {
               <DataTable.Row key={res.id}>
                 <DataTable.Cell>{res.id}</DataTable.Cell>
                 <DataTable.Cell>{res.description}</DataTable.Cell>
-                <DataTable.Cell>
+                <DataTable.Cell style={{justifyContent: 'center'}}>
                   <View style={{ flexDirection: 'row' }}>
                     <Button onPress={() => {
                       dispatch({ type: CategoryActionType.CANCEL, payload: res.id });
@@ -61,7 +61,7 @@ const CategoryTable = () => {
             page={page}
             numberOfPages={Math.ceil(state.categories.length / itemsPerPage)}
             onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${state.categories.length}`}
+            label={`${state.categories.length ? from + 1 : 0}-${to} of ${state.categories.length}`}
             numberOfItemsPerPageList={numberOfItemsPerPageList}
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}

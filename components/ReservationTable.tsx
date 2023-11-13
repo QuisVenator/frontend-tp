@@ -12,7 +12,7 @@ import { SnackBarActionType, useSnackBarContext } from '../provider/SnackBarCont
 
 const ReservationTable = () => {
   const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
+  const [numberOfItemsPerPageList] = React.useState([10, 15, 20]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[1]
   );
@@ -25,6 +25,10 @@ const ReservationTable = () => {
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, state.reservations.length);
+  const filteredReservations = state.reservations.slice(from, to).filter(res => (res.doctor.name+' '+res.doctor.lastName).includes(doctorSearch) &&
+                                (res.patient.name+' '+res.patient.lastName).includes(patientSearch) &&
+                                res.date >= dateFrom && res.date <= dateTo &&
+                                res.id > 0)
 
   const { dispatch: snackBarDispatch } = useSnackBarContext();
 
@@ -72,17 +76,14 @@ const ReservationTable = () => {
             <DataTable.Title>Acciones</DataTable.Title>
           </DataTable.Header>
 
-          {state.reservations.slice(from, to).filter(res => (res.doctor.name+' '+res.doctor.lastName).includes(doctorSearch) &&
-            (res.patient.name+' '+res.patient.lastName).includes(patientSearch) &&
-            res.date >= dateFrom && res.date <= dateTo &&
-            res.id > 0).map((res) => (
+          {filteredReservations.slice(from, to).map((res) => (
               <DataTable.Row key={res.id}>
                 <DataTable.Cell>{res.id}</DataTable.Cell>
                 <DataTable.Cell>{res.doctor.name + ' ' + res.doctor.lastName}</DataTable.Cell>
                 <DataTable.Cell>{res.patient.name + ' ' + res.doctor.lastName}</DataTable.Cell>
                 <DataTable.Cell>{res.date.getFullYear() + '-' + res.date.getMonth() + '-' + res.date.getDay()}</DataTable.Cell>
                 <DataTable.Cell>{timeToString(res.time)}</DataTable.Cell>
-                <DataTable.Cell>
+                <DataTable.Cell style={{justifyContent: 'center'}}>
                   <Button onPress={() => {
                     dispatch({ type: ReservationActionType.CANCEL, payload: res.id });
                     let payload = { visible: true, text: "Reserva eliminada correctamente" };
@@ -98,9 +99,9 @@ const ReservationTable = () => {
 
           <DataTable.Pagination
             page={page}
-            numberOfPages={Math.ceil(state.reservations.length / itemsPerPage)}
+            numberOfPages={Math.ceil(filteredReservations.length / itemsPerPage)}
             onPageChange={(page) => setPage(page)}
-            label={`${from + 1}-${to} of ${state.reservations.length}`}
+            label={`${filteredReservations.length ? from + 1 : 0}-${to} of ${filteredReservations.length}`}
             numberOfItemsPerPageList={numberOfItemsPerPageList}
             numberOfItemsPerPage={itemsPerPage}
             onItemsPerPageChange={onItemsPerPageChange}
